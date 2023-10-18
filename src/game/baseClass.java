@@ -1,7 +1,7 @@
+// baseClass.java
 package game;
 
 import javax.swing.JFrame;
-
 
 public class baseClass extends JFrame {
     protected ImagePanel imagePanel;
@@ -29,8 +29,12 @@ public class baseClass extends JFrame {
         textPanel.setBounds(0, 3 * getHeight() / 5, getWidth(), 1 * getHeight() / 3);
         setVisible(true);
 
-        // TextPanelで定義されたタイマーを開始
-        textPanel.startTimer();
+        // TimerPanelで定義されたタイマーを開始
+        startBaseTimer();
+    }
+
+    private void startBaseTimer() {
+        textPanel.startTextTimer(150); // タイマーの遅延を指定
     }
 
     public static void main(String[] args) {

@@ -1,3 +1,6 @@
+ // テキストを1文字ずつ0.15秒ごとに表示するためのタイマーをセットアップ
+
+// TextPanel.java
 package game;
 
 import java.awt.Color;
@@ -6,35 +9,16 @@ import java.awt.Graphics;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
-import javax.swing.JPanel;
-import javax.swing.Timer;
-
-class TextPanel extends JPanel {
+class TextPanel extends SecTimer {
     private String text;
     private StringBuilder currentText = new StringBuilder();
     private int currentLineIndex = 0;
     private int currentCharIndex = 0;
-    private Timer timer;
 
     public TextPanel(String text) {
         this.text = text;
         // 背景色を黒に設定
         setBackground(Color.BLACK);
-    }
-
-    public void startTimer() {
-        // テキストを1文字ずつ0.15秒ごとに表示するためのタイマーをセットアップ
-        timer = new Timer(150, new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                if (appendNextChar()) {
-                    repaint();
-                } else {
-                    timer.stop();
-                }
-            }
-        });
-        timer.start();
     }
 
     @Override
@@ -80,4 +64,18 @@ class TextPanel extends JPanel {
         String[] lines = currentText.toString().split("\n");
         return lines[currentLineIndex];
     }
+
+    public void startTextTimer(int delay) {
+        startTimer(delay, new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                if (appendNextChar()) {
+                    repaint();
+                } else {
+                    stopTimer();
+                }
+            }
+        });
+    }
 }
+
