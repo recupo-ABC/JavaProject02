@@ -1,3 +1,5 @@
+package game;
+
 
 public class GameOver extends baseClass {
     public GameOver() {

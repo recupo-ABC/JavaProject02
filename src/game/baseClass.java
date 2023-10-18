@@ -1,4 +1,7 @@
+package game;
+
 import javax.swing.JFrame;
+
 
 public class baseClass extends JFrame {
     protected ImagePanel imagePanel;

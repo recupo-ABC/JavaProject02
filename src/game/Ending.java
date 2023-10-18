@@ -1,3 +1,5 @@
+package game;
+
 public class Ending extends baseClass {
     public Ending() {
         super("エンディング画面", "images/boss.jpg", "｛ playerName｝くん、とても成長したな。\n"
