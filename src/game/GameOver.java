@@ -1,7 +1,7 @@
 package game;
 
 
-public class GameOver extends baseClass {
+public class GameOver extends BaseClass {
     public GameOver() {
         super("ゲームオーバー画面", "images/gameOver.jpg", "あーーー。\n"
                 + "やっちゃったわぁ・・・・\n"

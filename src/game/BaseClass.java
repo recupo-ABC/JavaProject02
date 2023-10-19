@@ -3,11 +3,11 @@ package game;
 
 import javax.swing.JFrame;
 
-public class baseClass extends JFrame {
-    protected ImagePanel imagePanel;
-    protected TextPanel textPanel;
+public class BaseClass extends JFrame {
+    protected BaseImagePanel imagePanel;
+    protected BaseTextPanel textPanel;
 
-    public baseClass(String title, String imagePath, String text) {
+    public BaseClass(String title, String imagePath, String text) {
         super(title);
         setSize(800, 600);
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
@@ -16,8 +16,8 @@ public class baseClass extends JFrame {
         getContentPane().setBackground(java.awt.Color.WHITE);
 
         // カスタムパネルを作成してフレームに追加
-        imagePanel = new ImagePanel(imagePath);
-        textPanel = new TextPanel(text);
+        imagePanel = new BaseImagePanel(imagePath);
+        textPanel = new BaseTextPanel(text);
 
         // パネルをフレームに追加
         add(imagePanel);
@@ -39,6 +39,6 @@ public class baseClass extends JFrame {
 
     public static void main(String[] args) {
         // テスト用：適切な画像ファイルパスとテキストを指定してください
-        new baseClass("Title", "path/to/image.jpg", "This is a test text.");
+        new BaseClass("Title", "path/to/image.jpg", "This is a test text.");
     }
 }

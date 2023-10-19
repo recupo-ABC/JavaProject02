@@ -1,6 +1,6 @@
 package game;
 
-public class Ending extends baseClass {
+public class Ending extends BaseClass {
     public Ending() {
         super("エンディング画面", "images/boss.jpg", "｛ playerName｝くん、とても成長したな。\n"
                 + "福岡県ダイバーシティ計画については知っているね？\n"

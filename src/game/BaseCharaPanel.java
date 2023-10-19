@@ -1,3 +1,4 @@
+// CharaPanel.java
 package game;
 
 import java.awt.Graphics;
@@ -6,12 +7,15 @@ import java.awt.Image;
 import javax.swing.ImageIcon;
 import javax.swing.JPanel;
 
-class ImagePanel extends JPanel {
+public class BaseCharaPanel extends JPanel {
     private Image image;
 
-    public ImagePanel(String imagePath) {
+    public BaseCharaPanel(String imagePath) {
         ImageIcon icon = new ImageIcon(imagePath);
         image = icon.getImage();
+        
+        // 背景を透明に設定
+        setOpaque(false);
     }
 
     @Override
