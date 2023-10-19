@@ -9,13 +9,13 @@ import java.awt.Graphics;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
-class TextPanel extends SecTimer {
+class BaseTextPanel extends BaseSecTimer {
     private String text;
     private StringBuilder currentText = new StringBuilder();
     private int currentLineIndex = 0;
     private int currentCharIndex = 0;
 
-    public TextPanel(String text) {
+    public BaseTextPanel(String text) {
         this.text = text;
         // 背景色を黒に設定
         setBackground(Color.BLACK);
