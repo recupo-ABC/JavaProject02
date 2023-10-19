@@ -1,3 +1,4 @@
+//呼び出し＊Proligue.showProligue()
 
 package game;
 
@@ -15,6 +16,10 @@ import javax.swing.Timer;
 
 public class Proligue {
     public static void main(String[] args) {
+        showProligue();
+    }
+
+    public static void showProligue() {
         JFrame baseFrame = new JFrame("プロローグ画面");
         baseFrame.setSize(800, 600);
         baseFrame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
@@ -32,7 +37,7 @@ public class Proligue {
 //                "岐阜駅から約1～2時間でいけますので、" +
                 "興味のある方は是非ご参考ください。";
 
-        // カスタムパネルを作成してフレームに追加
+     // カスタムパネルを作成してフレームに追加
         TextAndImagePanel panel = new TextAndImagePanel("images/tokai03.jpg", text);
         baseFrame.add(panel);
 
@@ -56,13 +61,12 @@ public class Proligue {
         });
         timer.start();
     }
-    
+
     private static void showEnding() {
         // Ending画面を表示
         JFrame endingFrame = new Ending();
         endingFrame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
     }
-    
 }
 
 class TextAndImagePanel extends JPanel {
