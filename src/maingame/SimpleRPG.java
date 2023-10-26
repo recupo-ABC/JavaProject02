@@ -1,3 +1,5 @@
+package maingame;
+
 import java.awt.Color;
 import java.awt.Font;
 import java.awt.Graphics;
@@ -11,24 +13,14 @@ import java.awt.event.MouseEvent;
 import java.awt.image.BufferedImage;
 import java.io.IOException;
 import java.util.Random;
+
 import javax.imageio.ImageIO;
-import javax.swing.JFrame;
 import javax.swing.JPanel;
 import javax.swing.Timer;
 
+    
 
-public class SimpleRPG {
-    public static void main(String[] args) {
-        JFrame frame = new JFrame("Simple RPG");
-        GamePanel gamePanel = new GamePanel();
-        frame.add(gamePanel);
-        frame.setSize(800, 600);
-        frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-        frame.setVisible(true);
-    }
-}
-
-class GamePanel extends JPanel implements ActionListener {
+class SimpleRPG extends JPanel implements ActionListener {
     private Timer timer;
     private Player player;
     private Enemy currentEnemy;
@@ -43,32 +35,53 @@ class GamePanel extends JPanel implements ActionListener {
     private boolean lastEnemyWasX = false;
     private boolean showChoices = false; // NEW: 選択肢を表示するかどうかのフラグ
     private int currentChoice = 0;       // NEW: 現在の選択肢 (0: 相手に対応する, 1: 逃げる)
-
+    long currentTime = System.currentTimeMillis();
     // 障害物の配列を追加
     private Obstacle[] obstacles;
     private BufferedImage battleModeBackground;
-
-    public GamePanel() {
+    public SimpleRPG() {
         this.setFocusable(true);
         
         this.addKeyListener(new KeyAdapter() {
         	@Override
         	public void keyPressed(KeyEvent e) {
+        		
         	    if (inBattle && showChoices) {
-        	        if (e.getKeyCode() == KeyEvent.VK_UP || e.getKeyCode() == KeyEvent.VK_DOWN) {
+        	        if (e.getKeyCode() == KeyEvent.VK_LEFT || e.getKeyCode() == KeyEvent.VK_RIGHT) {
         	            currentChoice = 1 - currentChoice; // 選択肢を切り替える
         	        } else if (e.getKeyCode() == KeyEvent.VK_ENTER) {
         	            if (currentChoice == 0) {
+        	            	String name = new String(TitleView.name.getText());
         	                String technique = player.useTechnique();
-        	                battleMessage = "必殺、" + technique + "！";
+        	                boolean victory = technique.endsWith("！");
+        	                if (!victory) {
+        	                    GameFrame.h += 1;
+        	                    battleMessage = technique + "\n\n" +"勝利！イキリーマンはHPが5追加された！";
+        	                } else {
+        	                    GameFrame.h -= 1;
+        	                    battleMessage = technique + "\n\n" + "敗北... イキリーマンはHPを5失った...";
+        	                }
+        	                battleMessageTimestamp = currentTime;
         	                showChoices = false;
+        	                Timer timer = new Timer(2000, new ActionListener() {
+        	                	@Override
+        	                	public void actionPerformed(ActionEvent paramActionEvent) {
+        	                	// ここに1秒後に実行する処理
+        	                		ClientMain.frame.changeView(new SimpleRPG());
+        	                	}
+        	                	});
+        	                	timer.setRepeats(false); // 1回だけ実行する場合
+        	                	timer.start();
+        	                
         	            } else {
         	                inBattle = false;
         	                showChoices = false;
         	                showEnemy = false;
         	                battleMessage = "";
+        	                ClientMain.frame.changeView(new SimpleRPG());
         	            }
-        	        }
+        	        }  
+        	       
         	    } else {
         	        player.keyPressed(e);
         	    }
@@ -93,7 +106,7 @@ class GamePanel extends JPanel implements ActionListener {
                         } else if (mouseX > getWidth() / 2 + choiceWidth && mouseX < getWidth()) {
                             currentChoice = 1;
                         }
-                        GamePanel.this.keyPressed(new KeyEvent(GamePanel.this, KeyEvent.KEY_PRESSED, System.currentTimeMillis(), 0, KeyEvent.VK_ENTER, KeyEvent.CHAR_UNDEFINED));
+                        SimpleRPG.this.keyPressed(new KeyEvent(SimpleRPG.this, KeyEvent.KEY_PRESSED, System.currentTimeMillis(), 0, KeyEvent.VK_ENTER, KeyEvent.CHAR_UNDEFINED));
 
                     }
                 }
@@ -103,7 +116,7 @@ class GamePanel extends JPanel implements ActionListener {
     
          // 画像の読み込み
         try {
-            battleModeBackground = ImageIO.read(getClass().getResource("battle_background.jpg"));
+            battleModeBackground = ImageIO.read(getClass().getResource("resources/battle_background.jpg"));
         } catch (IOException e) {
             e.printStackTrace();
         }
@@ -126,9 +139,15 @@ class GamePanel extends JPanel implements ActionListener {
        
     }
 
-    private void initGame() {
+    protected void keyPressed(KeyEvent keyEvent) {
+		// TODO 自動生成されたメソッド・スタブ
+		
+	}
+
+    
+	private void initGame() {
         if (player != null) {
-            player.resetHP(); 
+            player.resetHP();
         } else {
             player = new Player(375, 370, 10, obstacles); // obstacles を引数として追加
         }
@@ -141,7 +160,7 @@ class GamePanel extends JPanel implements ActionListener {
         showEnemy = true;
     }
 
-
+	
 
     @Override
     public void actionPerformed(ActionEvent e) {
@@ -163,11 +182,11 @@ class GamePanel extends JPanel implements ActionListener {
                 }
             }
 
-            if (battleMessage.equals("")) {
+            if (battleMessage.equals("") && !showChoices) {
                 battleMessage = currentEnemy.getEncounterMessage();
                 battleMessageTimestamp = currentTime;
                 showEnemy = true;
-            } else if (currentTime - battleMessageTimestamp > 2500) {
+            } else if (currentTime - battleMessageTimestamp > 500) {
                 if (isSecondaryMessage(battleMessage)) {
                     String nextMessage = currentEnemy.getNextSecondaryMessage();
                     if (nextMessage != null) {
@@ -175,14 +194,14 @@ class GamePanel extends JPanel implements ActionListener {
                         battleMessageTimestamp = currentTime;
                     } else {
                         showChoices = true; // 選択肢を表示
-                        battleMessage = ""; // 敵のメッセージを消去
+                        battleMessage = "";
                     }
                 } else if (battleMessage.equals(currentEnemy.getEncounterMessage())) {
                     battleMessage = currentEnemy.getNextSecondaryMessage();
                     battleMessageTimestamp = currentTime;
                 }
             } else if (battleMessage.startsWith("必殺、") && currentTime - battleMessageTimestamp > 2500) {
-                // この部分のコードは変更せずそのまま続けます
+            	//この部分のコードは変更せずそのまま続けます
             }
 
         } else {
@@ -252,7 +271,7 @@ private void checkCollisions() {
         int gameAreaHeight = (int) (this.getHeight() * 0.8);
         drawStatusWindow(g, 0, gameAreaHeight, this.getWidth() / 2, this.getHeight() - gameAreaHeight);
         drawBattleMessageWindow(g, this.getWidth() / 2, gameAreaHeight, this.getWidth() / 2, this.getHeight() - gameAreaHeight);
-        if (!battleMessage.equals("") && !showChoices) {
+        if (!showChoices) {
             drawBattleMessage(g, this.getWidth() / 2, gameAreaHeight, this.getWidth() / 2, this.getHeight() - gameAreaHeight);
         }
 
@@ -301,8 +320,8 @@ private void checkCollisions() {
         g.fillRect(x, y, width, height);
         g.setColor(Color.BLACK);
         g.drawRect(x, y, width, height);
-
-        g.drawString("イキリーマンHP初期値: 10", x + 10, y + 20);
+        String name = TitleView.name.getText();
+        g.drawString(name +"HP初期値: 10", x + 10, y + 20);
         g.drawString("HPが20になるとゲームクリア", x + 10, y + 40);
         g.drawString("HPが0になるとゲーム終了", x + 10, y + 60);
         g.drawString("現在のHP: " + player.hp, x + 10, y + 80);
@@ -321,237 +340,4 @@ private void checkCollisions() {
             g.drawString(lines[i], x + 10, y + (height / 4) + i * lineHeight);
         }
     }
-
-
-    class Player {
-        int x, y, hp;
-        final int SIZE = 75;  // サイズを20x20に変更
-        final int SPEED = 5;
-        private int prevX, prevY;
-        private Obstacle[] obstacles; 
-        private BufferedImage playerImage;  // 画像を読み込むための変数を追加
-
-        public Player(int x, int y, int hp, Obstacle[] obstacles) { 
-            this.x = x;
-            this.y = y;
-            this.hp = hp;
-            this.obstacles = obstacles; 
-
-            // 画像の読み込み
-            try {
-                playerImage = ImageIO.read(getClass().getResource("主人公.png"));
-            } catch (IOException e) {
-                e.printStackTrace();
-            }
-        }
-
-    public void keyPressed(KeyEvent e) {
-        prevX = x;
-        prevY = y;
-
-        int key = e.getKeyCode();
-        if (key == KeyEvent.VK_LEFT) {
-            x -= SPEED;
-        } else if (key == KeyEvent.VK_RIGHT) {
-            x += SPEED;
-        } else if (key == KeyEvent.VK_UP) {
-            y -= SPEED;
-        } else if (key == KeyEvent.VK_DOWN) {
-            y += SPEED;
-        }
-        move();  // この行を追加
-    }
-
-    public void move() { // シグネチャを変更
-    	if (x < 0) x = 0;
-    	if (x > 730) x = 730;  // 750から740に変更
-    	if (y < 0) y = 0;
-    	if (y > 380) y = 380;  // 550から540に変更
-
-        for (Obstacle obstacle : obstacles) {
-            if (this.intersects(obstacle)) {
-                this.undoMove();
-                break;
-            }
-        }
-    }
-
-
-    public String useTechnique() {
-        Random random = new Random();
-        if (random.nextBoolean()) {
-            return "イキり舌打ち！";
-        } else {
-            return "おとなぺこぺこ（笑）";
-        }
-    }
-
-    public void draw(Graphics g) {
-        g.drawImage(playerImage, x, y, SIZE, SIZE, null);  // 画像を描画
-    }
-
-    public void undoMove() {
-        x = prevX;
-        y = prevY;
-    }
-
-    public boolean intersects(Obstacle obstacle) {
-        Rectangle playerBounds = new Rectangle(x, y, SIZE, SIZE);
-        return playerBounds.intersects(obstacle.getBounds());
-    }
-    
-    public void resetHP() {
-        this.hp = 10; // 初期HP値に設定
-    }
-    
-}
-
-
-
-
-    class Enemy {
-        int x, y;
-        Color color;
-        final int SIZE = 75;  // サイズを50x50に変更
-        final int SPEED = 15;
-        private String encounterMessage;
-        private Obstacle[] obstacles;
-        private BufferedImage enemyImage;  // 敵の画像を読み込むための変数を追加
-
-        private int prevX, prevY;
-       
-        private String[] secondaryMessages; // 3つのセカンダリメッセージを格納するための配列
-        private int currentSecondaryMessageIndex = 0; // 現在表示しているセカンダリメッセージのインデックス
-        
-
-        public Enemy(int x, int y, Color color, String encounterMessage, Obstacle[] obstacles) {
-            this.x = x;
-            this.y = y;
-            this.color = color;
-            this.encounterMessage = encounterMessage;
-            this.obstacles = obstacles;
-
-            // 画像の読み込み
-            try {
-                if (color == Color.RED) {
-                    enemyImage = ImageIO.read(getClass().getResource("クレーマー.png"));
-                } else if (color == Color.BLUE) {
-                    enemyImage = ImageIO.read(getClass().getResource("パワハラ上司.png"));
-                }
-            } catch (IOException e) {
-                e.printStackTrace();
-            }
-        
-        
-            if (color == Color.RED) {
-                secondaryMessages = new String[]{
-                    "モンスタークレーマー：\n「あなたの会社いったいどうなってるの？」",
-                    "「私はあなたの会社のためを思って\n言ってるのよ！」",
-                    "「今すぐひざまずいて\n私のけつをなめなさいよ！」"
-                };
-            } else if (color == Color.BLUE) {
-                secondaryMessages = new String[]{
-                    "パワハラ上司：\n「おいコラお前は何様のつもりだ！」",
-                    "「俺がお前に怒鳴るのも殴るのも\n全てお前を思って言ってるんだぞ！」",
-                    "「今すぐひざまずいて俺様のけつをなめろ！」"
-                };
-            }
-        }
-
-        public String getNextSecondaryMessage() {
-            if (currentSecondaryMessageIndex < secondaryMessages.length) {
-                return secondaryMessages[currentSecondaryMessageIndex++];
-            } else {
-                return null; // これにより、すべてのセカンダリメッセージが表示された後にnullを返す
-            }
-        }
-
-
-    public String getEncounterMessage() {
-        return encounterMessage;
-    }
-
-    public void move(Player player) {
-        prevX = x;
-        prevY = y;
-
-        if (x < player.x) x += SPEED;
-        else if (x > player.x) x -= SPEED;
-
-        if (y < player.y) y += SPEED;
-        else if (y > player.y) y -= SPEED;
-
-        for (Obstacle obstacle : obstacles) {
-            if (this.intersects(obstacle)) {
-                this.undoMove();
-                this.findClearPath(obstacle);
-                break;
-            }
-        }
-    }
-
-    private void findClearPath(Obstacle obstacle) {
-        int[] dx = {-SPEED, 0, SPEED, 0};
-        int[] dy = {0, -SPEED, 0, SPEED};
-
-        for (int i = 0; i < 4; i++) {
-            int newX = x + dx[i];
-            int newY = y + dy[i];
-            Rectangle newPos = new Rectangle(newX, newY, SIZE, SIZE);
-            if (!newPos.intersects(obstacle.getBounds())) {
-                x = newX;
-                y = newY;
-                return;
-            }
-        }
-    }
-
-
-    public void draw(Graphics g) {
-        g.drawImage(enemyImage, x, y, SIZE, SIZE, null);  // 画像を描画
-    }
-
-    public void undoMove() {
-        x = prevX;
-        y = prevY;
-    }
-
-    public boolean intersects(Obstacle obstacle) {
-        Rectangle enemyBounds = new Rectangle(x, y, SIZE, SIZE);
-        return enemyBounds.intersects(obstacle.getBounds());
-    }
-    
- // 既存のコードの中での位置： Enemy クラスの最後に追加
-    public void changeDirection(Player player) {
-        int deltaX = player.x - x;
-        int deltaY = player.y - y;
-
-        if (Math.abs(deltaX) > Math.abs(deltaY)) {
-            x += deltaX > 0 ? -SPEED : SPEED;
-        } else {
-            y += deltaY > 0 ? -SPEED : SPEED;
-        }
-    }
-
-}
-
-class Obstacle {
-    int x, y, width, height;
-
-    public Obstacle(int x, int y, int width, int height) {
-        this.x = x;
-        this.y = y;
-        this.width = width;
-        this.height = height;
-    }
-
-    public Rectangle getBounds() {
-        return new Rectangle(x, y, width, height);
-    }
-
-    public void draw(Graphics g) {
-        g.setColor(new Color(244,164,96));
-        g.fillRect(x, y, width, height);
-    }
-}
 }
