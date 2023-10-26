@@ -47,13 +47,13 @@ public class GameFrame extends JFrame {
         view.requestFocusInWindow();
         validate();
         if(h == 1) {
-//        	Player.hp +=5;
-        	EndingView();
+        	Player.hp +=5;
+//        	EndingView();
         }else if(h == 2) {
         	Player.hp +=10;
         }else if(h == -1){
-//        	Player.hp -=5;
-        	EndingView();
+        	Player.hp -=5;
+//        	EndingView();
         }
         else if(h == -2) {
         	Player.hp -=10;
