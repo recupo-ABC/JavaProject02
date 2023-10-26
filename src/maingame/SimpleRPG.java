@@ -47,7 +47,7 @@ class SimpleRPG extends JPanel implements ActionListener {
         	public void keyPressed(KeyEvent e) {
         		
         	    if (inBattle && showChoices) {
-        	        if (e.getKeyCode() == KeyEvent.VK_LEFT || e.getKeyCode() == KeyEvent.VK_RIGHT) {
+        	        if (e.getKeyCode() == KeyEvent.VK_UP || e.getKeyCode() == KeyEvent.VK_DOWN) {
         	            currentChoice = 1 - currentChoice; // 選択肢を切り替える
         	        } else if (e.getKeyCode() == KeyEvent.VK_ENTER) {
         	            if (currentChoice == 0) {
@@ -146,11 +146,9 @@ class SimpleRPG extends JPanel implements ActionListener {
 
     
 	private void initGame() {
-        if (player != null) {
-            player.resetHP();
-        } else {
-            player = new Player(375, 370, 10, obstacles); // obstacles を引数として追加
-        }
+      
+        player = new Player(375, 370, 10, obstacles); // obstacles を引数として追加
+        
         enemyX = new Enemy(0, 0, Color.RED, "モンスタークレーマーに遭遇！", obstacles); // x座標とy座標を0に設定
         enemyY = new Enemy(770, 0, Color.BLUE, "パワハラ上司に遭遇！", obstacles); // x座標を770に、y座標を0に設定
         currentEnemy = random.nextBoolean() ? enemyX : enemyY;  
@@ -283,7 +281,7 @@ private void checkCollisions() {
 
     // NEW: 選択肢の描画メソッド
     private void drawChoices(Graphics g, int x, int y, int width, int height) {
-        String[] choices = {"対応する", "逃げる"};
+    	String[] choices = {"対応する", "逃げる"};
 
         g.setFont(new Font("MS UI Gothic", Font.BOLD, 16));
         int lineHeight = g.getFontMetrics().getHeight();
@@ -291,19 +289,18 @@ private void checkCollisions() {
         int choiceHeight = height / 2;
 
         // "SELECT!"の描画
-        g.drawString("SELECT!", x + width / 2 - g.getFontMetrics().stringWidth("SELECT!") / 2, y + lineHeight);
+//        g.drawString("SELECT!", x + width / 2 - g.getFontMetrics().stringWidth("SELECT!") / 2, y + lineHeight);
 
         for (int i = 0; i < choices.length; i++) {
             // 四角の線を描画
-            g.drawRect(x + i * choiceWidth, y + lineHeight, choiceWidth, choiceHeight);
             if (i == currentChoice) {
                 g.setColor(Color.RED);
-                g.drawString("→", x + i * choiceWidth, y + (height / 4) + (2 * lineHeight) - 5);
+                g.drawString("▶", x + choiceWidth*3 / 5 -10, y + i * (height / 5) + (3 * lineHeight));
                 g.setColor(Color.BLACK);
             } else {
                 g.setColor(Color.BLACK);
             }
-            g.drawString(choices[i], x + i * choiceWidth + 10, y + (height / 4) + (2 * lineHeight));
+            g.drawString(choices[i], x + choiceWidth*3 / 5, y + i * (height / 5) + (3 * lineHeight));
         }
     }
 

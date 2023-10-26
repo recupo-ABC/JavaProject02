@@ -104,7 +104,7 @@ public class TitleView extends JPanel implements ActionListener{
 			switch(e.getKeyCode()) {
 			case KeyEvent.VK_ENTER:
 				if (e.getKeyCode() == KeyEvent.VK_ENTER) {		
-//					ClientMain.frame.changeView(new SimpleRPG());
+					ClientMain.frame.changeView(new SimpleRPG());
 				}
 		}
 		}
