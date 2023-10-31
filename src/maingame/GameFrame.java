@@ -12,6 +12,8 @@ import javax.swing.WindowConstants;
 
 public class GameFrame extends JFrame {
 	static int h = 0;
+	static int n = 0;
+	static int Z = 1;
 	Player player;
     public GameFrame() {
         setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
@@ -46,32 +48,28 @@ public class GameFrame extends JFrame {
         add(view);
         view.requestFocusInWindow();
         validate();
-        if(h == 1) {
-        	Player.hp +=5;
-//        	EndingView();
-        }else if(h == 2) {
-        	Player.hp +=10;
-        }else if(h == -1){
-        	Player.hp -=5;
-//        	EndingView();
-        }
-        else if(h == -2) {
-        	Player.hp -=10;
+        Player.hp = 10;
+        GameFrame.Z++; 
+        Player.hp -= n * 3;
+        Player.hp += h * 5;
+        if(Player.hp >= 20 ) {
+        	EndingView();
+        }if(Player.hp <= 0){
+        	EndingView();
         }
     }
 	
 	
 	public void PrologueView() {
-
-		
-		String text ="“イキり”…。それは、隠し持つガラスのハートの表れ…。\n\n";
-//	            + 
-//	            "ウサギのような小心者の新卒サラリーマン「うさお」は、\n"
+		String name = new String(TitleView.name.getText());
+		String text ="“イキり”…。それは、隠し持つガラスのハートの表れ…。\n\n"
+	            + 
+	            "ウサギのような小心者の新卒サラリーマン「うさお」は、\n";
 //	            + 
 //	            "今日もイキりまくったファッションで\n"
 //	            + "IT企業「ZOO」に二日酔い＆大遅刻で現れた。\n\n"
 //	            +
-//	            "そんな「うさお」に突然、社長室へ来るようにとの指示が…。\n\n"
+//	            "そんな「" + name + " 」に突然、社長室へ来るようにとの指示が…。\n\n"
 //	            + 
 //	            "“そんな…まさか、遅刻ぐらいで社長室へ…（涙）”\n"
 //	            + "ウサギのハートをびくびく震わせながらも、\n"
@@ -108,7 +106,6 @@ public class GameFrame extends JFrame {
 	    }
 	public void EndingView() {
 		getContentPane().removeAll();
-        
 		String name = new String(TitleView.name.getText());
 		String text1 = 
 		"らいおん社長\n" +
@@ -168,7 +165,6 @@ public class GameFrame extends JFrame {
 	    }
 	public void EndingView1() {
 		getContentPane().removeAll();
-        
 		String name = new String(TitleView.name.getText());
 		String text2 =
 
@@ -203,8 +199,8 @@ public class GameFrame extends JFrame {
 	                } else {
 	                    ((Timer) e.getSource()).stop();
 	                    // プロローグ終了後、Ending画面に遷移
+	                    h = 0;
 	                    ClientMain.frame.changeView(new TitleView());
-	                    
 	                }
 	            }
 	        });

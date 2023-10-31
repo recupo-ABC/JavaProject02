@@ -38,7 +38,6 @@ public class Player {
 public void keyPressed(KeyEvent e) {
     prevX = x;
     prevY = y;
-
     int key = e.getKeyCode();
     if (key == KeyEvent.VK_LEFT) {
         x -= SPEED;
@@ -48,8 +47,8 @@ public void keyPressed(KeyEvent e) {
         y -= SPEED;
     } else if (key == KeyEvent.VK_DOWN) {
         y += SPEED;
-    }
-    move();  // この行を追加
+    }   
+    move();  // この行を追加    	
 }
 
 public void move() { // シグネチャを変更
@@ -74,6 +73,19 @@ public String useTechnique() {
     } else {
         return "おとなぺこぺこ（笑）";
     }
+}
+
+public String useTechnique1() {
+    Random random = new Random();
+    int randomValue = random.nextInt(2);
+    if (randomValue == 0) {
+        return "往復ビンタ！";
+    } else if(randomValue == 1) {
+        return "おとなぺこぺこ（笑）";
+    }else if(randomValue == 2) {
+    	return "のしかかり！";
+    }
+	return null;
 }
 
 public void draw(Graphics g) {

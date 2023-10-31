@@ -23,11 +23,13 @@ public class Enemy {
    
     public String[] secondaryMessages; // 3つのセカンダリメッセージを格納するための配列
     private int currentSecondaryMessageIndex = 0; // 現在表示しているセカンダリメッセージのインデックス
+	static int z;
     
 
-    public Enemy(int x, int y, Color color, String encounterMessage, Obstacle[] obstacles) {
+    public Enemy(int x, int y, Color color, String encounterMessage, Obstacle[] obstacles, int z) {
         this.x = x;
         this.y = y;
+        this.z = z;
         this.color = color;
         this.encounterMessage = encounterMessage;
         this.obstacles = obstacles;

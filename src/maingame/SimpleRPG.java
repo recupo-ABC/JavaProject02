@@ -34,11 +34,13 @@ class SimpleRPG extends JPanel implements ActionListener {
     private long enemyRespawnTimestamp = 0;
     private boolean lastEnemyWasX = false;
     private boolean showChoices = false; // NEW: 選択肢を表示するかどうかのフラグ
-    private int currentChoice = 0;       // NEW: 現在の選択肢 (0: 相手に対応する, 1: 逃げる)
+    private int currentChoice = 0;  
+    boolean monster = false;// NEW: 現在の選択肢 (0: 相手に対応する, 1: 逃げる)
     long currentTime = System.currentTimeMillis();
     // 障害物の配列を追加
     private Obstacle[] obstacles;
     private BufferedImage battleModeBackground;
+    String name = new String(TitleView.name.getText());
     public SimpleRPG() {
         this.setFocusable(true);
         
@@ -46,8 +48,8 @@ class SimpleRPG extends JPanel implements ActionListener {
         	@Override
         	public void keyPressed(KeyEvent e) {
         		
-        	    if (inBattle && showChoices) {
-        	        if (e.getKeyCode() == KeyEvent.VK_UP || e.getKeyCode() == KeyEvent.VK_DOWN) {
+        	    if (inBattle && showChoices && monster) {
+        	        if (e.getKeyCode() == KeyEvent.VK_DOWN || e.getKeyCode() == KeyEvent.VK_UP) {
         	            currentChoice = 1 - currentChoice; // 選択肢を切り替える
         	        } else if (e.getKeyCode() == KeyEvent.VK_ENTER) {
         	            if (currentChoice == 0) {
@@ -74,21 +76,70 @@ class SimpleRPG extends JPanel implements ActionListener {
         	                	timer.start();
         	                
         	            } else {
-        	                inBattle = false;
+        	            	battleMessage = name + "は逃げ出した";
+        	            	GameFrame.n++;
+        	                battleMessageTimestamp = currentTime;
         	                showChoices = false;
-        	                showEnemy = false;
-        	                battleMessage = "";
-        	                ClientMain.frame.changeView(new SimpleRPG());
+        	                Timer timer = new Timer(2000, new ActionListener() {
+        	                	@Override
+        	                	public void actionPerformed(ActionEvent paramActionEvent) {
+        	                	// ここに1秒後に実行する処理
+        	                		ClientMain.frame.changeView(new SimpleRPG());
+        	                	}
+        	                	});
+        	                	timer.setRepeats(false); // 1回だけ実行する場合
+        	                	timer.start();
         	            }
         	        }  
-        	       
+        	    }if (inBattle && showChoices && !monster) {
+        	        if (e.getKeyCode() == KeyEvent.VK_DOWN || e.getKeyCode() == KeyEvent.VK_UP) {
+        	            currentChoice = 1 - currentChoice; // 選択肢を切り替える
+        	        } else if (e.getKeyCode() == KeyEvent.VK_ENTER) {
+        	            if (currentChoice == 0) {
+        	            	String name = new String(TitleView.name.getText());
+        	                String technique = player.useTechnique1();
+        	                boolean victory = technique.endsWith("！");
+        	                if (!victory) {
+        	                    GameFrame.h += 1;
+        	                    battleMessage = technique + "\n\n" +"勝利！イキリーマンはHPが5追加された！";
+        	                } else {
+        	                    GameFrame.h -= 1;
+        	                    battleMessage = technique + "\n\n" + "敗北... イキリーマンはHPを5失った...";
+        	                }
+        	                battleMessageTimestamp = currentTime;
+        	                showChoices = false;
+        	                Timer timer = new Timer(2000, new ActionListener() {
+        	                	@Override
+        	                	public void actionPerformed(ActionEvent paramActionEvent) {
+        	                	// ここに1秒後に実行する処理
+        	                		ClientMain.frame.changeView(new SimpleRPG());
+        	                	}
+        	                	});
+        	                	timer.setRepeats(false); // 1回だけ実行する場合
+        	                	timer.start();
+        	                
+        	            } else {
+        	            	battleMessage = name + "は逃げ出した";
+        	            	GameFrame.n++;
+        	            	battleMessageTimestamp = currentTime;
+        	                showChoices = false;
+        	                Timer timer = new Timer(2000, new ActionListener() {
+        	                	@Override
+        	                	public void actionPerformed(ActionEvent paramActionEvent) {
+        	                	// ここに1秒後に実行する処理
+        	                		ClientMain.frame.changeView(new SimpleRPG());
+        	                	}
+        	                	});
+        	                	timer.setRepeats(false); // 1回だけ実行する場合
+        	                	timer.start();
+        	            }
+        	        }  
         	    } else {
         	        player.keyPressed(e);
         	    }
         	}
 
         });
-        
         
         
         this.addMouseListener(new MouseAdapter() {
@@ -146,13 +197,20 @@ class SimpleRPG extends JPanel implements ActionListener {
 
     
 	private void initGame() {
-      
-        player = new Player(375, 370, 10, obstacles); // obstacles を引数として追加
-        
-        enemyX = new Enemy(0, 0, Color.RED, "モンスタークレーマーに遭遇！", obstacles); // x座標とy座標を0に設定
-        enemyY = new Enemy(770, 0, Color.BLUE, "パワハラ上司に遭遇！", obstacles); // x座標を770に、y座標を0に設定
-        currentEnemy = random.nextBoolean() ? enemyX : enemyY;  
-        lastEnemyWasX = (currentEnemy == enemyX);
+        if (player != null) {
+            player.resetHP();
+        } else {
+            player = new Player(375, 370, 10, obstacles); // obstacles を引数として追加
+        }
+        enemyX = new Enemy(0, 0, Color.RED, "モンスタークレーマーに遭遇！", obstacles, 0); // x座標とy座標を0に設定
+        enemyY = new Enemy(770, 0, Color.BLUE, "パワハラ上司に遭遇！", obstacles, 1); // x座標を770に、y座標を0に設定
+        if(GameFrame.Z % 2 == 0) {
+        	currentEnemy = enemyX;
+        }else if(GameFrame.Z % 2 == 1) {
+        	currentEnemy = enemyY;
+        }
+         
+//        lastEnemyWasX = (currentEnemy == enemyX);
         timer = new Timer(100, this);
         timer.start();
         showEnemy = true;
@@ -168,8 +226,8 @@ class SimpleRPG extends JPanel implements ActionListener {
             int prevPlayerY = player.y;
 
             // Position the player directly below the enemy during a battle
-            player.x = currentEnemy.x + (currentEnemy.SIZE - player.SIZE) / 2;
-            player.y = currentEnemy.y + currentEnemy.SIZE;
+//            player.x = currentEnemy.x + (currentEnemy.SIZE - player.SIZE) / 2;
+//            player.y = currentEnemy.y + currentEnemy.SIZE;
 
             // Check for collisions with obstacles
             for (Obstacle obstacle : obstacles) {
@@ -184,7 +242,7 @@ class SimpleRPG extends JPanel implements ActionListener {
                 battleMessage = currentEnemy.getEncounterMessage();
                 battleMessageTimestamp = currentTime;
                 showEnemy = true;
-            } else if (currentTime - battleMessageTimestamp > 500) {
+            } else if (currentTime - battleMessageTimestamp > 1500) {
                 if (isSecondaryMessage(battleMessage)) {
                     String nextMessage = currentEnemy.getNextSecondaryMessage();
                     if (nextMessage != null) {
@@ -192,6 +250,7 @@ class SimpleRPG extends JPanel implements ActionListener {
                         battleMessageTimestamp = currentTime;
                     } else {
                         showChoices = true; // 選択肢を表示
+                        monster = battleMessage.endsWith("よ！」");
                         battleMessage = "";
                     }
                 } else if (battleMessage.equals(currentEnemy.getEncounterMessage())) {
@@ -281,7 +340,7 @@ private void checkCollisions() {
 
     // NEW: 選択肢の描画メソッド
     private void drawChoices(Graphics g, int x, int y, int width, int height) {
-    	String[] choices = {"対応する", "逃げる"};
+        String[] choices = {"対応する", "逃げる"};
 
         g.setFont(new Font("MS UI Gothic", Font.BOLD, 16));
         int lineHeight = g.getFontMetrics().getHeight();
@@ -289,33 +348,33 @@ private void checkCollisions() {
         int choiceHeight = height / 2;
 
         // "SELECT!"の描画
-//        g.drawString("SELECT!", x + width / 2 - g.getFontMetrics().stringWidth("SELECT!") / 2, y + lineHeight);
+        g.drawString("SELECT!", x + width / 2 - g.getFontMetrics().stringWidth("SELECT!") / 2, y + lineHeight);
 
         for (int i = 0; i < choices.length; i++) {
             // 四角の線を描画
             if (i == currentChoice) {
                 g.setColor(Color.RED);
-                g.drawString("▶", x + choiceWidth*3 / 5 -10, y + i * (height / 5) + (3 * lineHeight));
-                g.setColor(Color.BLACK);
+                g.drawString("▶", x + width/2 - g.getFontMetrics().stringWidth("対応する"), y + i * (height / 5) + (3 * lineHeight));
+                g.setColor(Color.WHITE);
             } else {
-                g.setColor(Color.BLACK);
+                g.setColor(Color.WHITE);
             }
-            g.drawString(choices[i], x + choiceWidth*3 / 5, y + i * (height / 5) + (3 * lineHeight));
+            g.drawString(choices[i], x + width/2 - g.getFontMetrics().stringWidth("逃げる"), y + i * (height / 5) + (3 * lineHeight));
         }
     }
 
 
     private void drawBattleMessageWindow(Graphics g, int x, int y, int width, int height) {
-        g.setColor(Color.WHITE);
-        g.fillRect(x, y, width, height);
         g.setColor(Color.BLACK);
+        g.fillRect(x, y, width, height);
+        g.setColor(Color.WHITE);
         g.drawRect(x, y, width, height);
     }
 
     private void drawStatusWindow(Graphics g, int x, int y, int width, int height) {
-        g.setColor(Color.WHITE);
-        g.fillRect(x, y, width, height);
         g.setColor(Color.BLACK);
+        g.fillRect(x, y, width, height);
+        g.setColor(Color.WHITE);
         g.drawRect(x, y, width, height);
         String name = TitleView.name.getText();
         g.drawString(name +"HP初期値: 10", x + 10, y + 20);
@@ -325,9 +384,9 @@ private void checkCollisions() {
     }
 
     private void drawBattleMessage(Graphics g, int x, int y, int width, int height) {
-        g.setColor(Color.WHITE);
-        g.fillRect(x, y, width, height);
         g.setColor(Color.BLACK);
+        g.fillRect(x, y, width, height);
+        g.setColor(Color.WHITE);
         g.drawRect(x, y, width, height);
         g.setFont(new Font("MS UI Gothic", Font.BOLD, 16));
         
