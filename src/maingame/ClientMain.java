@@ -13,8 +13,7 @@ public class ClientMain {
         
 //        frame.TitleView();
 //        frame.PrologueView();
-       System.out.println();
-  
+       
    
     }
 }

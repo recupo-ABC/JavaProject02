@@ -72,7 +72,7 @@ class SimpleRPG extends JPanel implements ActionListener {
         	                	timer.start();
         	                
         	            } else {
-        	            	battleMessage = name + "は逃げ出した";
+        	            	battleMessage = name + "は逃げ出した…\nその代償にHPを3失った…";
         	            	GameFrame.n++;
         	                battleMessageTimestamp = currentTime;
         	                showChoices = false;
@@ -115,7 +115,7 @@ class SimpleRPG extends JPanel implements ActionListener {
         	                	timer.start();
         	                
         	            } else {
-        	            	battleMessage = name + "は逃げ出した";
+        	            	battleMessage = name + "は逃げ出した…\nその代償にHPを3失った…";
         	            	GameFrame.n++;
         	            	battleMessageTimestamp = currentTime;
         	                showChoices = false;
@@ -138,34 +138,34 @@ class SimpleRPG extends JPanel implements ActionListener {
         });
         
         
+        //マウスリスナー        
         this.addMouseListener(new MouseAdapter() {
             @Override
             public void mouseClicked(MouseEvent e) {
                 if (showChoices) {
-                    int mouseX = e.getX();
+                  
                     int mouseY = e.getY();
-                    int width = getWidth();
                     int height = getHeight();
-                    int choiceHeight = (int) (height * 0.2) / 2;
-                    int startY = (int) (height * 0.8);
-                    int messageWindowX = width / 2;
-                    int halfWidth = messageWindowX / 2;
+                    int choiceAreaHeight = (int) (height * 0.2); // 全体の下側20%
+                    int choiceAreaStartY = height - choiceAreaHeight; // 選択領域の開始Y座標
+                    int halfChoiceAreaHeight = choiceAreaHeight / 2; // 選択領域の半分の高さ
 
-                    // 「対応する」の選択肢の領域をクリックした場合
-                    if (mouseY > startY && mouseY < startY + choiceHeight && mouseX > messageWindowX && mouseX < messageWindowX + halfWidth) 
-//                    	「mouseY > startY」 &&（かつ）「 mouseY < startY + choiceHeight」ということ                 	
-                    {
+                    // 「対応する」の選択肢の領域をクリックした場合 (選択領域の上半分)
+                    if (mouseY >= choiceAreaStartY && mouseY < choiceAreaStartY + halfChoiceAreaHeight) {
                         currentChoice = 0;
                         executeAction();
                     }
-                    // 「逃げる」の選択肢の領域をクリックした場合
-                    else if (mouseY > startY && mouseY < startY + choiceHeight && mouseX > messageWindowX + halfWidth && mouseX < messageWindowX + 2 * halfWidth) {
+                    // 「逃げる」の選択肢の領域をクリックした場合 (選択領域の下半分)
+                    else if (mouseY >= choiceAreaStartY + halfChoiceAreaHeight && mouseY < choiceAreaStartY + choiceAreaHeight) {
                         currentChoice = 1;
                         executeAction();
                     }
                 }
             }
         });
+
+
+   
 
     
          // 画像の読み込み
@@ -261,7 +261,7 @@ class SimpleRPG extends JPanel implements ActionListener {
             	timer.start();
             
         } else {
-        	battleMessage = name + "は逃げ出した";
+        	battleMessage = name + "は逃げ出した…。\nその代償にHPを3減らした…。";
         	GameFrame.n++;
         	battleMessageTimestamp = currentTime;
             showChoices = false;
