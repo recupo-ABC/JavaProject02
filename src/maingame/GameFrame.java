@@ -2,7 +2,14 @@ package maingame;
 
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.io.File;
+import java.io.IOException;
 
+import javax.sound.sampled.AudioInputStream;
+import javax.sound.sampled.AudioSystem;
+import javax.sound.sampled.Clip;
+import javax.sound.sampled.LineUnavailableException;
+import javax.sound.sampled.UnsupportedAudioFileException;
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
 import javax.swing.JFrame;
@@ -58,6 +65,17 @@ public class GameFrame extends JFrame {
 	public void setHP(int hp) {
 		this.hp = hp;
 	}
+	
+	 public static void playSoundEffect(String soundFilePath) {
+	        try {
+	            AudioInputStream audioStream = AudioSystem.getAudioInputStream(new File(soundFilePath));
+	            Clip clip = AudioSystem.getClip();
+	            clip.open(audioStream);
+	            clip.start();
+	        } catch (UnsupportedAudioFileException | LineUnavailableException | IOException e) {
+	            e.printStackTrace();
+	        }
+	    }
 	
 	public void PrologueView() {
 		String name = new String(TitleView.name.getText());

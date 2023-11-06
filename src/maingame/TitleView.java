@@ -73,6 +73,7 @@ public class TitleView extends JPanel implements ActionListener{
     }
 	public void actionPerformed(ActionEvent e) {
         if (e.getActionCommand().equals("start")) { 
+        	GameFrame.playSoundEffect("src/maingame/resources/シャキーン1.wav");
         	label.setText(name.getText());
         	remove(startButton);
         	remove(name);
