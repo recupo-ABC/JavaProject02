@@ -66,16 +66,16 @@ public class GameFrame extends JFrame {
 		this.hp = hp;
 	}
 	
-	 public static void playSoundEffect(String soundFilePath) {
-	        try {
-	            AudioInputStream audioStream = AudioSystem.getAudioInputStream(new File(soundFilePath));
-	            Clip clip = AudioSystem.getClip();
-	            clip.open(audioStream);
-	            clip.start();
-	        } catch (UnsupportedAudioFileException | LineUnavailableException | IOException e) {
-	            e.printStackTrace();
-	        }
-	    }
+	public static void playSoundEffect(String soundFilePath) {
+        try {
+            AudioInputStream audioStream = AudioSystem.getAudioInputStream(new File(soundFilePath));
+            Clip clip = AudioSystem.getClip();
+            clip.open(audioStream);
+            clip.start();
+        } catch (UnsupportedAudioFileException | LineUnavailableException | IOException e) {
+            e.printStackTrace();
+        }
+    }
 	
 	public void PrologueView() {
 		String name = new String(TitleView.name.getText());
@@ -100,13 +100,13 @@ public class GameFrame extends JFrame {
 	        TextAndImagePanel panel = new TextAndImagePanel("src/maingame/resources/prologue2.png", TitleView.text);
 	        this.add(panel);
 	     // スキップボタンの作成
-		    JButton skipButton = new JButton(new ImageIcon("src/maingame/resources/start-button.png"));
+		    JButton skipButton = new JButton(new ImageIcon("src/maingame/resources/skip_b.png"));
 
-		    int buttonWidth = 300;
+		    int buttonWidth = 200;
 		    int buttonHeight = 80;
 		    panel.setLayout(null); 
 		    // 重要！レイアウトマネージャを無効化
-		    skipButton.setBounds(480,450,buttonWidth,buttonHeight);
+		    skipButton.setBounds(500,450,buttonWidth,buttonHeight);
 		    skipButton.setOpaque(false);
 		    skipButton.setContentAreaFilled(false);
 		    skipButton.setBorderPainted(false);
@@ -116,7 +116,7 @@ public class GameFrame extends JFrame {
 		    skipButton.addActionListener(new ActionListener() {
 		        @Override
 		        public void actionPerformed(ActionEvent e) {
-		            changeView(new SimpleRPG());
+		            PrologueView1();
 		        }
 		    });
 		    panel.add(skipButton);
@@ -140,6 +140,81 @@ public class GameFrame extends JFrame {
 	        });
 	        timer.start();
 	    }
+public void PrologueView1() {
+		
+		String name = TitleView.name.getText();
+		getContentPane().removeAll();
+
+		
+		String text ="「社長室の前のミーティングルームで、\n"
+	            + "お前はパワハラ上司や\n"
+				+"クレーマークライアントに出会うだろう。\n\n"
+	            +
+	             "そこで大人な対応を続けることができれば、\n"
+	            + "イキりから真の社会人になれたと認められる。\n\n"
+	            +
+	             "そして、そのミッションを\n"
+	            +"クリアすることができれば \n"	            
+	            + "向かいの壁のどこかにある、\n"
+	            +"社長室への扉が開くとのことだ…。」\n\n"	           
+                +
+	            "小物なハートを震わせながら、\n"
+	            +"平静を装いミーティングルームへ向かう「"+name+"」。\n\n"
+	            +
+	            "果たして「"+name+"」はシン・社会人となり、\n"
+	            +"社長に対面できるのだろうか…。\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n」"
+	       
+
+	            ;
+	     // カスタムパネルを作成してフレームに追加
+	        TextAndImagePanel panel = new TextAndImagePanel("src/maingame/resources/prologue1.png", TitleView.text);
+	        panel.setLayout(null); 
+		    // 重要！レイアウトマネージャを無効化
+		    
+		    this.add(panel);
+		    
+		 // スキップボタンの作成
+		    JButton skipButton = new JButton(new ImageIcon("src/maingame/resources/start-button.png"));
+
+		    int buttonWidth = 300;
+		    int buttonHeight = 80;
+
+		    skipButton.setBounds(480,450,buttonWidth,buttonHeight);
+		    skipButton.setOpaque(false);
+		    skipButton.setContentAreaFilled(false);
+		    skipButton.setBorderPainted(false);
+
+		   
+
+		    skipButton.addActionListener(new ActionListener() {
+		        @Override
+		        public void actionPerformed(ActionEvent e) {
+		            changeView(new SimpleRPG());
+		        }
+		    });
+		    panel.add(skipButton);
+		    
+		    // フレームを表示
+		    this.setVisible(true);
+
+	        // テキストを1文字ずつ0.1秒ごとに表示するためのタイマーをセットアップ
+	        Timer timer = new Timer(100, new ActionListener() {
+	            private int charIndex = 0;
+
+	            @Override
+	            public void actionPerformed(ActionEvent e) {
+	                if (charIndex < text.length()) {
+	                	panel.appendChar(text.charAt(charIndex++));
+	                } else {
+	                    ((Timer) e.getSource()).stop();
+	                    // プロローグ終了後、Ending画面に遷移
+	                    
+	                }
+	            }
+	        });
+	        timer.start();
+	    }
+	
 	public void EndingView() {
 		getContentPane().removeAll();
 		String name = new String(TitleView.name.getText());
