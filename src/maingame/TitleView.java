@@ -26,6 +26,7 @@ public class TitleView extends JPanel implements ActionListener{
 	JLabel label1;
 	static String text;
 	static JButton startButton;
+	Player player;
     public TitleView() {
     	
     	backgroundImage = Toolkit.getDefaultToolkit().createImage("src/maingame/resources/画像３.jpg");
@@ -44,7 +45,6 @@ public class TitleView extends JPanel implements ActionListener{
         setFocusable(true);
         setVisible(true);
         setBounds(0,0,800,600);
-        
         
         startButton.setIcon(buttonIcon);
         startButton.setBounds(445, 467, 63, 36);

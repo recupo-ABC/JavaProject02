@@ -12,10 +12,9 @@ import javax.swing.WindowConstants;
 
 
 public class GameFrame extends JFrame {
-	static int h = 0;
-	static int n = 0;
 	static int Z = 1;
-	Player player;
+	private int hp = 10;
+	boolean end = false;
     public GameFrame() {
         setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
         setTitle("TypingEats");
@@ -49,48 +48,47 @@ public class GameFrame extends JFrame {
         add(view);
         view.requestFocusInWindow();
         validate();
-        Player.hp = 10;
         GameFrame.Z++; 
-        Player.hp -= n * 3;
-        Player.hp += h * 5;
-        if(Player.hp >= 20 ) {
-        	EndingView();
-        }if(Player.hp <= 0){
-        	EndingView();
-        }
-    }
+    }	
 	
+	public int getHP() {
+		return hp ;
+	}
+	
+	public void setHP(int hp) {
+		this.hp = hp;
+	}
 	
 	public void PrologueView() {
 		String name = new String(TitleView.name.getText());
 		String text ="“イキり”…。それは、隠し持つガラスのハートの表れ…。\n\n"
 	            + 
-	            "ウサギのような小心者の新卒サラリーマン「うさお」は、\n";
-//	            + 
-//	            "今日もイキりまくったファッションで\n"
-//	            + "IT企業「ZOO」に二日酔い＆大遅刻で現れた。\n\n"
-//	            +
-//	            "そんな「" + name + " 」に突然、社長室へ来るようにとの指示が…。\n\n"
-//	            + 
-//	            "“そんな…まさか、遅刻ぐらいで社長室へ…（涙）”\n"
-//	            + "ウサギのハートをびくびく震わせながらも、\n"
-//	            + "イキった顔で社長室へと向かう「うさお」。\n\n"
-//	            + "その背中に、きりん課長が声をかける。\n"
-//	            + "“社長室の前のミーティングルームで、\n"
-//	            + "お前はパワハラ上司やクレーマークライアントに出会うだろう。\n\n"
-//	            + "そこで大人な対応を続けることができれば、\n"
-//	            + "イキりから真の社会人になれたと認められる。”";
+	            "ウサギのような小心者の新卒サラリーマン「"+ name+ "」は、\n"
+	            + 
+	            "今日もイキりまくったファッションで\n"
+	            + "IT企業「ZOO」に二日酔い＆大遅刻で現れた。\n\n"
+	            +
+	            "そんな「" + name + " 」に突然、社長室へ来るようにとの指示が…。\n\n"
+	            + 
+	            "“そんな…まさか、遅刻ぐらいで社長室へ…（涙）”\n"
+	            + "ウサギのハートをびくびく震わせながらも、\n"
+	            + "イキった顔で社長室へと向かう「うさお」。\n\n"
+	            + "その背中に、きりん課長が声をかける。\n"
+	            + "“社長室の前のミーティングルームで、\n"
+	            + "お前はパワハラ上司やクレーマークライアントに出会うだろう。\n\n"
+	            + "そこで大人な対応を続けることができれば、\n"
+	            + "イキりから真の社会人になれたと認められる。”";
 	     // カスタムパネルを作成してフレームに追加
 	        TextAndImagePanel panel = new TextAndImagePanel("src/maingame/resources/prologue2.png", TitleView.text);
 	        this.add(panel);
 	     // スキップボタンの作成
-		    JButton skipButton = new JButton(new ImageIcon("src/maingame/resources/skip_b.png"));
+		    JButton skipButton = new JButton(new ImageIcon("src/maingame/resources/start-button.png"));
 
-		    int buttonWidth = 200;
+		    int buttonWidth = 300;
 		    int buttonHeight = 80;
 		    panel.setLayout(null); 
 		    // 重要！レイアウトマネージャを無効化
-		    skipButton.setBounds(500,450,buttonWidth,buttonHeight);
+		    skipButton.setBounds(480,450,buttonWidth,buttonHeight);
 		    skipButton.setOpaque(false);
 		    skipButton.setContentAreaFilled(false);
 		    skipButton.setBorderPainted(false);
@@ -118,9 +116,7 @@ public class GameFrame extends JFrame {
 	                	panel.appendChar(text.charAt(charIndex++));
 	                } else {
 	                    ((Timer) e.getSource()).stop();
-	                    // プロローグ終了後、Ending画面に遷移
-	                    ClientMain.frame.changeView(new SimpleRPG());
-	                    
+	                    // プロローグ終了後、Ending画面に遷移             
 	                }
 	            }
 	        });
@@ -181,12 +177,12 @@ public class GameFrame extends JFrame {
 		    skipButton.addActionListener(new ActionListener() {
 		        @Override
 		        public void actionPerformed(ActionEvent e) {
-		            changeView(new SimpleRPG());
+		            EndingView1();
 		        }
 		    });
 	        // フレームを表示
 	        this.setVisible(true);
-
+	        panel.add(skipButton);
 
 	        // テキストを1文字ずつ0.1秒ごとに表示するためのタイマーをセットアップ
 	        Timer timer = new Timer(50, new ActionListener() {
@@ -199,7 +195,6 @@ public class GameFrame extends JFrame {
 	                } else {
 	                    ((Timer) e.getSource()).stop();
 	                    // プロローグ終了後、Ending画面に遷移
-	                    ClientMain.frame.EndingView1();
 	                    
 	                }
 	            }
@@ -210,7 +205,6 @@ public class GameFrame extends JFrame {
 		getContentPane().removeAll();
 		String name = new String(TitleView.name.getText());
 		String text2 =
-
 		name + "\n"+
 		"「なんと、私ごときに…。\nありがたき幸せッッ…！」\n"+
 		"\n"+
@@ -250,7 +244,7 @@ public class GameFrame extends JFrame {
 		    panel.add(skipButton);
 	        // フレームを表示
 	        this.setVisible(true);
-
+	        end = true;
 
 	        // テキストを1文字ずつ0.1秒ごとに表示するためのタイマーをセットアップ
 	        Timer timer = new Timer(50, new ActionListener() {
@@ -263,8 +257,6 @@ public class GameFrame extends JFrame {
 	                } else {
 	                    ((Timer) e.getSource()).stop();
 	                    // プロローグ終了後、Ending画面に遷移
-	                    Player.hp -= 10;
-	                    ClientMain.frame.changeView(new TitleView());
 	                }
 	            }
 	        });
