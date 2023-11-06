@@ -129,7 +129,7 @@ class SimpleRPG extends JPanel implements ActionListener {
         	                	timer.start();
         	                
         	            } else {
-        	            	battleMessage = name + "は逃げ出した\\nプライドが傷付きHPが3減った、、";
+        	            	battleMessage = name + "は逃げ出した\nプライドが傷付きHPが3減った、、";
         	            	battleMessageTimestamp = currentTime;
         	                showChoices = false;
         	                Timer timer = new Timer(2000, new ActionListener() {
@@ -234,7 +234,7 @@ class SimpleRPG extends JPanel implements ActionListener {
                 	timer.start();
                 
             } else {
-            	battleMessage = name + "は逃げ出した\\nプライドが傷付きHPが3減った、、";           	
+            	battleMessage = name + "は逃げ出した\nプライドが傷付きHPが3減った、、";           	
                 battleMessageTimestamp = currentTime;
                 showChoices = false;
                 Timer timer = new Timer(2000, new ActionListener() {
@@ -278,7 +278,7 @@ class SimpleRPG extends JPanel implements ActionListener {
             	timer.start();
             
         } else {
-        	battleMessage = name + "は逃げ出した\\nプライドが傷付きHPが3減った、、";
+        	battleMessage = name + "は逃げ出した\nプライドが傷付きHPが3減った、、";
         	battleMessageTimestamp = currentTime;
             showChoices = false;
             Timer timer = new Timer(2000, new ActionListener() {

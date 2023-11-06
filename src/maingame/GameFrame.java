@@ -248,7 +248,7 @@ public void PrologueView1() {
 //		静かに頷き、頬を涙で濡らす「うさお」。
 //		そのうさぎの赤い瞳は、『ZOO』の行く末を明るく照らしていた…。
 
-	        TextAndImagePanel panel = new TextAndImagePanel("src/maingame/resources/prologue1.png",text1);
+	        TextAndImagePanel panel = new TextAndImagePanel("src/maingame/resources/boss1.jpg",text1);
 	        add(panel);
 	        panel.requestFocusInWindow();
 	        validate();
