@@ -1,3 +1,4 @@
+
 package maingame;
 
 import java.awt.Color;
@@ -15,99 +16,122 @@ import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JTextField;
 
+/**
+ * タイトル画面を表示するパネルクラス
+ */
+public class TitleView extends JPanel implements ActionListener {
+    private Image backgroundImage;
+    static JTextField name;
+    private JLabel label;
+    private static JButton startButton;
 
-
-public class TitleView extends JPanel implements ActionListener{
-	MyKeyListener myKeyListener;
-	Image backgroundImage;
-	static JTextField name;
-	JLabel label;
-	JLabel label1;
-	static String text;
-	static JButton startButton;
+    /**
+     * コンストラクタ
+     */
     public TitleView() {
-    	
-    	backgroundImage = Toolkit.getDefaultToolkit().createImage("src/maingame/resources/画像３.jpg");
-    	startButton = new JButton("");
-    	JLabel title = new JLabel("イキリーマン伝説");
-        JLabel title1= new JLabel("～シン・社会人へのキャリアップ～");
-        JLabel title2= new JLabel("プレイヤーネームを入力して下さい");
-        label = new JLabel("");
-        label1 = new JLabel("");
-        name = new JTextField("", 20);
-        name.setBounds(320,470,150,30);
-    	setOpaque(false);
+        initializeComponents();
         setLayout(null);
+        setBounds(0, 0, 800, 600);
+        setOpaque(false);
         setFocusable(true);
         setVisible(true);
-        setBounds(0,0,800,600);
-        
+        new MyKeyListener(this);
+    }
+
+    /**
+     * コンポーネントの初期化
+     */
+    private void initializeComponents() {
+        // 画像の読み込み
+        backgroundImage = Toolkit.getDefaultToolkit().createImage("src/maingame/resources/mainImg2.jpg");
+
+        // タイトルラベル
+        JLabel title = new JLabel("イキリーマン伝説");
+        title.setForeground(Color.BLACK);
+        title.setFont(new Font("SansSerif", Font.BOLD, 32));
+        title.setBounds(260, 250, 400, 100);
+
+        // サブタイトルラベル
+        JLabel title1 = new JLabel("～シン・社会人へのキャリアップ～");
+        title1.setForeground(Color.BLACK);
+        title1.setFont(new Font("SansSerif", Font.BOLD, 24));
+        title1.setBounds(200, 300, 500, 100);
+
+        // 入力ラベル
+        JLabel title2 = new JLabel("プレイヤーネームを入力して下さい");
+        title2.setForeground(Color.BLACK);
+        title2.setFont(new Font("SansSerif", Font.BOLD, 18));
+        title2.setBounds(250, 500, 300, 30);
+
+        // プレイヤーネーム入力フィールド
+        name = new JTextField("", 20);
+        name.setBounds(320, 470, 150, 30);
+
+        // 開始ボタン
+        startButton = new JButton("");
         startButton.setBounds(170, 210, 500, 200);
         startButton.setContentAreaFilled(false);
         startButton.setBorderPainted(false);
         startButton.addActionListener(this);
         startButton.setActionCommand("start");
-        add(startButton);
-        add(name);
-        title.setForeground(Color.BLACK);
-        title1.setBounds(200,300,500,100);
-        title1.setForeground(Color.BLACK);
-        title.setBounds(260,250,400,100);
-        title2.setBounds(250,500,300,30);
-        title2.setForeground(Color.BLACK);
-        title.setFont(new Font("SansSerif", Font.BOLD, 32));
-        title1.setFont(new Font("SansSerif", Font.BOLD, 24));
-        title2.setFont(new Font("SansSerif", Font.BOLD, 18));
-//        add(title);
-//        add(title1);
+
+        // コンポーネントの追加
+        add(title);
+        add(title1);
         add(title2);
-
-
-        ClientMain.frame.getRootPane().setDefaultButton(startButton);
-        myKeyListener = new MyKeyListener(this);
+        add(name);
+        add(startButton);
     }
-	public void actionPerformed(ActionEvent e) {
-        if (e.getActionCommand().equals("start")) { 
-        	label.setText(name.getText());
-        	remove(startButton);
-        	remove(name);
-        	ClientMain.frame.PrologueView();
-//        	ClientMain.frame.EndingView();
-        	return;
-        } 
-	}
-	
-	public void paint(Graphics g) {
-		g.drawImage(backgroundImage, 0, 0, this); // 背景イメージを描画
-		super.paint(g); // 子供コンポーネントの描画等、上位クラスで実現している表示内容の描画
-		}
-	private class MyKeyListener implements KeyListener{
-		//貼り付け先を保持
-		TitleView panel;
-		
-		//コンストラクタ
-		MyKeyListener(TitleView p){
-			super();
-			panel = p;
-			panel.addKeyListener(this);
-		}
-		
-		public void keyTyped(KeyEvent e) {
-			
-		}
-		
-		public void keyReleased(KeyEvent e) {
-			
-		}
-		
-		public void keyPressed(KeyEvent e) {
-			switch(e.getKeyCode()) {
-			case KeyEvent.VK_ENTER:
-				if (e.getKeyCode() == KeyEvent.VK_ENTER) {		
-					ClientMain.frame.changeView(new SimpleRPG());
-				}
-		}
-		}
-	}
-	
+
+    /**
+     * ボタンクリック時のアクション
+     */
+    public void actionPerformed(ActionEvent e) {
+        if (e.getActionCommand().equals("start")) {
+            label.setText(name.getText());
+            remove(startButton);
+            remove(name);
+            ClientMain.getFrame().PrologueView();
+            return;
+        }
+    }
+
+    /**
+     * パネルの描画処理
+     */
+    @Override
+    public void paint(Graphics g) {
+        g.drawImage(backgroundImage, 0, 0, this);
+        super.paint(g);
+    }
+
+    /**
+     * キーリスナークラス
+     */
+    private class MyKeyListener implements KeyListener {
+        // 貼り付け先を保持
+        TitleView panel;
+
+        // コンストラクタ
+        MyKeyListener(TitleView p) {
+            super();
+            panel = p;
+            panel.addKeyListener(this);
+        }
+
+        public void keyTyped(KeyEvent e) {
+        }
+
+        public void keyReleased(KeyEvent e) {
+        }
+
+        public void keyPressed(KeyEvent e) {
+            // エンターキーが押された場合の処理
+            if (e.getKeyCode() == KeyEvent.VK_ENTER) {
+                ClientMain.getFrame().changeView(new SimpleRPG(), 0);
+            }
+        }
+    }
 }
+
+

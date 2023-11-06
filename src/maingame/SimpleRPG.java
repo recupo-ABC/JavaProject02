@@ -1,3 +1,5 @@
+//1031_リファクタリング：済
+
 package maingame;
 
 import java.awt.Color;
@@ -18,148 +20,188 @@ import javax.imageio.ImageIO;
 import javax.swing.JPanel;
 import javax.swing.Timer;
 
-    
-
 class SimpleRPG extends JPanel implements ActionListener {
+
+    // タイマーは定期的なアクションをトリガーします。
     private Timer timer;
+    
+    // プレイヤーや敵、バトルメッセージなど、ゲーム内の主要なオブジェクトを管理します。
     private Player player;
     private Enemy currentEnemy;
     private Enemy enemyX;
     private Enemy enemyY;
+    
+    // バトルの進行状況やメッセージ表示などの制御フラグを管理します。
     private boolean inBattle = false;
-    private Random random = new Random();
-    private String battleMessage = "";
-    private long battleMessageTimestamp = 0;
     private boolean showEnemy = false;
-    private long enemyRespawnTimestamp = 0;
-    private boolean lastEnemyWasX = false;
-    private boolean showChoices = false; // NEW: 選択肢を表示するかどうかのフラグ
-    private int currentChoice = 0;       // NEW: 現在の選択肢 (0: 相手に対応する, 1: 逃げる)
-    long currentTime = System.currentTimeMillis();
-    // 障害物の配列を追加
+    private boolean showChoices = false;
+    private int currentChoice = 0;
+    private long currentTime = System.currentTimeMillis();
+    
+    // 障害物の配列を管理し、バトルの背景画像を保持します。
     private Obstacle[] obstacles;
     private BufferedImage battleModeBackground;
+    
+    // バトルメッセージや選択肢表示などの情報を保持します。
+    private String battleMessage = "カーソルキーで動きます";
+    private long battleMessageTimestamp = 0;
+    
+    
+    // コンストラクタは初期化を行います。
     public SimpleRPG() {
         this.setFocusable(true);
         
+        // キーリスナーやマウスリスナーの追加
         this.addKeyListener(new KeyAdapter() {
-        	@Override
-        	public void keyPressed(KeyEvent e) {
-        		
-        	    if (inBattle && showChoices) {
-        	        if (e.getKeyCode() == KeyEvent.VK_UP || e.getKeyCode() == KeyEvent.VK_DOWN) {
-        	            currentChoice = 1 - currentChoice; // 選択肢を切り替える
-        	        } else if (e.getKeyCode() == KeyEvent.VK_ENTER) {
-        	            if (currentChoice == 0) {
-        	            	String name = new String(TitleView.name.getText());
-        	                String technique = player.useTechnique();
-        	                boolean victory = technique.endsWith("！");
-        	                if (!victory) {
-        	                    GameFrame.h += 1;
-        	                    battleMessage = technique + "\n\n" +"勝利！イキリーマンはHPが5追加された！";
-        	                } else {
-        	                    GameFrame.h -= 1;
-        	                    battleMessage = technique + "\n\n" + "敗北... イキリーマンはHPを5失った...";
-        	                }
-        	                battleMessageTimestamp = currentTime;
-        	                showChoices = false;
-        	                Timer timer = new Timer(2000, new ActionListener() {
-        	                	@Override
-        	                	public void actionPerformed(ActionEvent paramActionEvent) {
-        	                	// ここに1秒後に実行する処理
-        	                		ClientMain.frame.changeView(new SimpleRPG());
-        	                	}
-        	                	});
-        	                	timer.setRepeats(false); // 1回だけ実行する場合
-        	                	timer.start();
-        	                
-        	            } else {
-        	                inBattle = false;
-        	                showChoices = false;
-        	                showEnemy = false;
-        	                battleMessage = "";
-        	                ClientMain.frame.changeView(new SimpleRPG());
-        	            }
-        	        }  
-        	       
-        	    } else {
-        	        player.keyPressed(e);
-        	    }
-        	}
-
-        });
-        
-        
-        
-        this.addMouseListener(new MouseAdapter() {
             @Override
-            public void mouseClicked(MouseEvent e) {
-                if (showChoices) {
-                    int mouseX = e.getX();
-                    int mouseY = e.getY();
-                    int choiceWidth = getWidth() / 2;
-                    int choiceHeight = (int) (getHeight() * 0.2) / 2;
-                    int startY = (int) (getHeight() * 0.8);
-                    if (mouseY > startY && mouseY < startY + choiceHeight) {
-                        if (mouseX > getWidth() / 2 && mouseX < getWidth() / 2 + choiceWidth) {
-                            currentChoice = 0;
-                        } else if (mouseX > getWidth() / 2 + choiceWidth && mouseX < getWidth()) {
-                            currentChoice = 1;
-                        }
-                        SimpleRPG.this.keyPressed(new KeyEvent(SimpleRPG.this, KeyEvent.KEY_PRESSED, System.currentTimeMillis(), 0, KeyEvent.VK_ENTER, KeyEvent.CHAR_UNDEFINED));
-
-                    }
-                }
+            public void keyPressed(KeyEvent e) {
+                handleKeyPressed(e);
             }
         });
 
+        this.addMouseListener(new MouseAdapter() {
+            @Override
+            public void mouseClicked(MouseEvent e) {
+                handleMouseClicked(e);
+            }
+        });
+
+     // 画像の読み込みや障害物の初期化
+        loadImages();
+        initializeObstacles();
+
+        initGame();
+    }
+
+    // キーが押されたときの処理を制御します。
+    private void handleKeyPressed(KeyEvent e) {
+        if (inBattle && showChoices) {
+            handleBattleChoicesKeyPressed(e);
+        } else {
+            player.keyPressed(e);
+        }
+    }
+
     
-         // 画像の読み込み
+    // マウスがクリックされたときの処理を制御します。
+    private void handleMouseClicked(MouseEvent e) {
+        if (showChoices) {
+            handleBattleChoicesMouseClicked(e);
+        } else {
+            player.mouseClicked(e);
+        }
+    }
+
+    
+    // バトル中の選択肢がキー入力されたときの処理を制御します。
+    private void handleBattleChoicesKeyPressed(KeyEvent e) {
+        if (e.getKeyCode() == KeyEvent.VK_UP || e.getKeyCode() == KeyEvent.VK_DOWN) {
+            currentChoice = 1 - currentChoice;
+        } else if (e.getKeyCode() == KeyEvent.VK_ENTER) {
+            handleChoiceEnter();
+        }
+    }
+
+    // バトル中の選択肢がマウスでクリックされたときの処理を制御します。
+    private void handleBattleChoicesMouseClicked(MouseEvent e) {
+        int mouseX = e.getX();
+        int mouseY = e.getY();
+        int choiceWidth = getWidth() / 2;
+        int choiceHeight = (int) (getHeight() * 0.2) / 2;
+        int startY = (int) (getHeight() * 0.8);
+        if (mouseY > startY && mouseY < startY + choiceHeight) {
+            if (mouseX > getWidth() / 2 && mouseX < getWidth() / 2 + choiceWidth) {
+                currentChoice = 0;
+            } else if (mouseX > getWidth() / 2 + choiceWidth && mouseX < getWidth()) {
+                currentChoice = 1;
+            }
+            handleChoiceEnter();
+        }
+    }
+
+    private void handleChoiceEnter() {
+        if (currentChoice == 0) {
+            handleChoiceZero();
+        } else {
+            handleChoiceOne();
+        }
+    }
+
+    // 選択肢0が選択されたときの処理
+    private void handleChoiceZero() {
+        new String(TitleView.name.getText());
+        String technique = player.useTechnique();
+        boolean victory = technique.endsWith("！");
+        if (!victory) {
+            GameFrame.h += 1;
+            battleMessage = technique + "\n\n" + "勝利！イキリーマンはHPが5追加された！";
+        } else {
+            GameFrame.h -= 1;
+            battleMessage = technique + "\n\n" + "敗北... イキリーマンはHPを5失った...";
+        }
+        handleChoiceCompletion();
+    }
+
+    // 選択肢1が選択されたときの処理
+    private void handleChoiceOne() {
+        inBattle = false;
+        showChoices = false;
+        showEnemy = false;
+        battleMessage = "";
+        GameFrame.h -= 3;
+        ClientMain.getFrame().changeView(new SimpleRPG(), currentChoice);
+    }
+
+    
+    // 選択肢が完了したときの処理を制御します。
+    private void handleChoiceCompletion() {
+        battleMessageTimestamp = currentTime;
+        showChoices = false;
+        Timer timer = new Timer(2000, paramActionEvent -> {
+            ClientMain.getFrame().changeView(new SimpleRPG(), 0);
+        });
+        timer.setRepeats(false);
+        timer.start();
+    }
+
+    
+    // 画像の読み込み
+    private void loadImages() {
         try {
             battleModeBackground = ImageIO.read(getClass().getResource("resources/battle_background.jpg"));
         } catch (IOException e) {
             e.printStackTrace();
         }
-        
-        // 障害物を初期化
+    }
+
+    
+ // 障害物の初期化
+    private void initializeObstacles() {
         obstacles = new Obstacle[]{
             new Obstacle(150, 60, 40, 90),
             new Obstacle(300, 60, 40, 90),
             new Obstacle(450, 60, 40, 90),
             new Obstacle(600, 60, 40, 90),
-            
             new Obstacle(150, 250, 40, 90),
             new Obstacle(300, 250, 40, 90),
             new Obstacle(450, 250, 40, 90),
             new Obstacle(600, 250, 40, 90)
         };
-        
-        initGame();
-
-       
     }
 
-    protected void keyPressed(KeyEvent keyEvent) {
-		// TODO 自動生成されたメソッド・スタブ
-		
-	}
-
     
-	private void initGame() {
-      
-        player = new Player(375, 370, 10, obstacles); // obstacles を引数として追加
-        
-        enemyX = new Enemy(0, 0, Color.RED, "モンスタークレーマーに遭遇！", obstacles); // x座標とy座標を0に設定
-        enemyY = new Enemy(770, 0, Color.BLUE, "パワハラ上司に遭遇！", obstacles); // x座標を770に、y座標を0に設定
-        currentEnemy = random.nextBoolean() ? enemyX : enemyY;  
-        lastEnemyWasX = (currentEnemy == enemyX);
+    // ゲームの初期化
+    private void initGame() {
+        player = new Player(375, 370, 10, obstacles);
+        enemyX = new Enemy(0, 0, Color.RED, "モンスタークレーマーに遭遇！", obstacles);
+        enemyY = new Enemy(770, 0, Color.BLUE, "パワハラ上司に遭遇！", obstacles);
+        currentEnemy = new Random().nextBoolean() ? enemyX : enemyY;
         timer = new Timer(100, this);
         timer.start();
         showEnemy = true;
     }
 
-	
-
+    // タイマーがアクションをトリガーしたときの処理を制御
     @Override
     public void actionPerformed(ActionEvent e) {
         long currentTime = System.currentTimeMillis();
@@ -167,11 +209,9 @@ class SimpleRPG extends JPanel implements ActionListener {
             int prevPlayerX = player.x;
             int prevPlayerY = player.y;
 
-            // Position the player directly below the enemy during a battle
-            player.x = currentEnemy.x + (currentEnemy.SIZE - player.SIZE) / 2;
-            player.y = currentEnemy.y + currentEnemy.SIZE;
+            player.x = currentEnemy.getX() + (currentEnemy.getSize() - player.SIZE) / 2;
+            player.y = currentEnemy.getY() + currentEnemy.getSize();
 
-            // Check for collisions with obstacles
             for (Obstacle obstacle : obstacles) {
                 if (player.intersects(obstacle)) {
                     player.x = prevPlayerX;
@@ -191,7 +231,7 @@ class SimpleRPG extends JPanel implements ActionListener {
                         battleMessage = nextMessage;
                         battleMessageTimestamp = currentTime;
                     } else {
-                        showChoices = true; // 選択肢を表示
+                        showChoices = true;
                         battleMessage = "";
                     }
                 } else if (battleMessage.equals(currentEnemy.getEncounterMessage())) {
@@ -199,50 +239,42 @@ class SimpleRPG extends JPanel implements ActionListener {
                     battleMessageTimestamp = currentTime;
                 }
             } else if (battleMessage.startsWith("必殺、") && currentTime - battleMessageTimestamp > 2500) {
-            	//この部分のコードは変更せずそのまま続けます
+                // 省略.
             }
-
         } else {
-            currentEnemy.move(player);  // 敵がプレイヤーに近づくように移動
-            checkCollisions();  // 衝突判定
-
+            currentEnemy.move(player);
+            checkCollisions();
             if (inBattle) {
                 battleMessage = "";
                 showEnemy = true;
                 battleMessageTimestamp = currentTime;
             }
         }
-
         repaint();
     }
 
-
-
-private void checkCollisions() {
+    private void checkCollisions() {
         Rectangle playerBounds = new Rectangle(player.x, player.y, player.SIZE, player.SIZE);
-        Rectangle enemyBounds = new Rectangle(currentEnemy.x, currentEnemy.y, currentEnemy.SIZE, currentEnemy.SIZE);
+        Rectangle enemyBounds = new Rectangle(currentEnemy.getX(), currentEnemy.getY(), currentEnemy.getSize(), currentEnemy.getSize());
         if (playerBounds.intersects(enemyBounds)) {
             inBattle = true;
         }
 
-        // 障害物との衝突判定を追加
-     // 障害物との衝突判定を追加
         for (Obstacle obstacle : obstacles) {
             if (player.intersects(obstacle)) {
-                player.undoMove();  // プレイヤーの移動を元に戻す
+                player.undoMove();
             }
         }
     }
-    
+
     private boolean isSecondaryMessage(String message) {
-        for (String secondaryMsg : currentEnemy.secondaryMessages) {
+        for (String secondaryMsg : currentEnemy.getSecondaryMessages()) {
             if (message.equals(secondaryMsg)) {
                 return true;
             }
         }
         return false;
     }
-
 
     @Override
     protected void paintComponent(Graphics g) {
@@ -253,7 +285,6 @@ private void checkCollisions() {
             g.drawImage(battleModeBackground, 0, 0, this.getWidth(), gameAreaHeight, null);
         }
 
-        // 戦闘中でない場合のみ、障害物を描画
         if (!inBattle) {
             for (Obstacle obstacle : obstacles) {
                 obstacle.draw(g);
@@ -265,7 +296,6 @@ private void checkCollisions() {
             currentEnemy.draw(g);
         }
 
-        // メッセージエリアの下部1/5部分の描画
         int gameAreaHeight = (int) (this.getHeight() * 0.8);
         drawStatusWindow(g, 0, gameAreaHeight, this.getWidth() / 2, this.getHeight() - gameAreaHeight);
         drawBattleMessageWindow(g, this.getWidth() / 2, gameAreaHeight, this.getWidth() / 2, this.getHeight() - gameAreaHeight);
@@ -278,63 +308,60 @@ private void checkCollisions() {
         }
     }
 
-
-    // NEW: 選択肢の描画メソッド
+    
+    
+//   ************************** メッセージスペース  ************************** 
     private void drawChoices(Graphics g, int x, int y, int width, int height) {
-    	String[] choices = {"対応する", "逃げる"};
+        String[] choices = {"対応する", "逃げる"};
 
-        g.setFont(new Font("MS UI Gothic", Font.BOLD, 16));
+        g.setFont(new Font("SansSerifc", Font.PLAIN, 16));
         int lineHeight = g.getFontMetrics().getHeight();
         int choiceWidth = width / 2;
-        int choiceHeight = height / 2;
-
-        // "SELECT!"の描画
-//        g.drawString("SELECT!", x + width / 2 - g.getFontMetrics().stringWidth("SELECT!") / 2, y + lineHeight);
-
         for (int i = 0; i < choices.length; i++) {
-            // 四角の線を描画
             if (i == currentChoice) {
                 g.setColor(Color.RED);
-                g.drawString("▶", x + choiceWidth*3 / 5 -10, y + i * (height / 5) + (3 * lineHeight));
-                g.setColor(Color.BLACK);
+                g.drawString("▶", x + choiceWidth * 3 / 5 - 10, y + i * (height / 5) + (3 * lineHeight));
+                g.setColor(Color.WHITE);
             } else {
-                g.setColor(Color.BLACK);
+                g.setColor(Color.WHITE);
             }
-            g.drawString(choices[i], x + choiceWidth*3 / 5, y + i * (height / 5) + (3 * lineHeight));
+            g.drawString(choices[i], x + choiceWidth * 3 / 5, y + i * (height / 5) + (3 * lineHeight));
         }
     }
 
-
     private void drawBattleMessageWindow(Graphics g, int x, int y, int width, int height) {
-        g.setColor(Color.WHITE);
-        g.fillRect(x, y, width, height);
         g.setColor(Color.BLACK);
+        g.fillRect(x, y, width, height);
+        g.setColor(Color.WHITE);
         g.drawRect(x, y, width, height);
     }
 
-    private void drawStatusWindow(Graphics g, int x, int y, int width, int height) {
-        g.setColor(Color.WHITE);
-        g.fillRect(x, y, width, height);
-        g.setColor(Color.BLACK);
-        g.drawRect(x, y, width, height);
-        String name = TitleView.name.getText();
-        g.drawString(name +"HP初期値: 10", x + 10, y + 20);
-        g.drawString("HPが20になるとゲームクリア", x + 10, y + 40);
-        g.drawString("HPが0になるとゲーム終了", x + 10, y + 60);
-        g.drawString("現在のHP: " + player.hp, x + 10, y + 80);
-    }
 
     private void drawBattleMessage(Graphics g, int x, int y, int width, int height) {
-        g.setColor(Color.WHITE);
-        g.fillRect(x, y, width, height);
         g.setColor(Color.BLACK);
+        g.fillRect(x, y, width, height);
+        g.setColor(Color.WHITE);
         g.drawRect(x, y, width, height);
-        g.setFont(new Font("MS UI Gothic", Font.BOLD, 16));
-        
+        g.setFont(new Font("SansSerif", Font.PLAIN, 18));
+
         String[] lines = battleMessage.split("\n");
         int lineHeight = g.getFontMetrics().getHeight();
         for (int i = 0; i < lines.length; i++) {
             g.drawString(lines[i], x + 10, y + (height / 4) + i * lineHeight);
         }
     }
+    
+    private void drawStatusWindow(Graphics g, int x, int y, int width, int height) {
+    	g.setColor(Color.BLACK);
+    	g.fillRect(x, y, width, height);
+    	g.setColor(Color.WHITE);
+    	g.drawRect(x, y, width, height);
+    	String name = TitleView.name.getText();
+    	g.drawString(name + "HP初期値: 10", x + 10, y + 20);
+    	g.drawString("HPが20になるとゲームクリア", x + 10, y + 40);
+    	g.drawString("HPが0になるとゲーム終了", x + 10, y + 60);
+    	g.drawString("現在のHP: " + Player.getHp(), x + 10, y + 80);
+    }
+    
+    
 }
