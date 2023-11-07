@@ -91,11 +91,7 @@ public class GameFrame extends JFrame {
 	            "“そんな…まさか、遅刻ぐらいで社長室へ…（涙）”\n"
 	            + "ウサギのハートをびくびく震わせながらも、\n"
 	            + "イキった顔で社長室へと向かう「うさお」。\n\n"
-	            + "その背中に、きりん課長が声をかける。\n"
-	            + "“社長室の前のミーティングルームで、\n"
-	            + "お前はパワハラ上司やクレーマークライアントに出会うだろう。\n\n"
-	            + "そこで大人な対応を続けることができれば、\n"
-	            + "イキりから真の社会人になれたと認められる。”";
+	            + "その背中に、きりん課長が声をかける。\n";
 	     // カスタムパネルを作成してフレームに追加
 	        TextAndImagePanel panel = new TextAndImagePanel("src/maingame/resources/prologue2.png", TitleView.text);
 	        this.add(panel);
@@ -125,7 +121,7 @@ public class GameFrame extends JFrame {
 
 
 	        // テキストを1文字ずつ0.1秒ごとに表示するためのタイマーをセットアップ
-	        Timer timer = new Timer(50, new ActionListener() {
+	        Timer timer = new Timer(30, new ActionListener() {
 	            private int charIndex = 0;
 
 	            @Override
@@ -162,10 +158,7 @@ public void PrologueView1() {
 	            +"平静を装いミーティングルームへ向かう「"+name+"」。\n\n"
 	            +
 	            "果たして「"+name+"」はシン・社会人となり、\n"
-	            +"社長に対面できるのだろうか…。\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n」"
-	       
-
-	            ;
+	            +"社長に対面できるのだろうか…。\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n";
 	     // カスタムパネルを作成してフレームに追加
 	        TextAndImagePanel panel = new TextAndImagePanel("src/maingame/resources/prologue1.png", TitleView.text);
 	        panel.setLayout(null); 
@@ -198,7 +191,7 @@ public void PrologueView1() {
 		    this.setVisible(true);
 
 	        // テキストを1文字ずつ0.1秒ごとに表示するためのタイマーをセットアップ
-	        Timer timer = new Timer(100, new ActionListener() {
+	        Timer timer = new Timer(30, new ActionListener() {
 	            private int charIndex = 0;
 
 	            @Override
@@ -222,7 +215,7 @@ public void PrologueView1() {
 		"らいおん社長\n" +
 		"「待っていたよ…。『"+name+"』くん…」\n\n"+
 		name + "\n"+
-		"「大変お待たせして、\n申し訳ありませんでした！\n" +
+		"「大変お待たせして、申し訳ありませんでした！\n" +
 		"らいおん社長ッッ…！」\n\n"+
 		"らいおん社長\n"+
 		"「『男子たるもの、\n三日会わざれば刮目して見よ』と言うが…。\n"+
@@ -230,11 +223,7 @@ public void PrologueView1() {
 		name + "\n"+
 		"「めっそうもございませんッッ…！」\n\n"+
 		"らいおん社長\n"+
-		"「ところで、『福岡県ダイバーシティ計画』\nのことは知っているね？\n"+
-		"今後、我が社も大きなプロジェクトを\n担当する予定だ。\n"+
-		"\n"+
-		"実は君に、そのリーダーを任せたい」\n";
-
+		"「ところで、『福岡県ダイバーシティ計画』\nのことは知っているね？\n";		
 //		うさお
 //		「なんと、私ごときに…。ありがたき幸せッッ…！」
 //
@@ -278,7 +267,7 @@ public void PrologueView1() {
 	        panel.add(skipButton);
 
 	        // テキストを1文字ずつ0.1秒ごとに表示するためのタイマーをセットアップ
-	        Timer timer = new Timer(50, new ActionListener() {
+	        Timer timer = new Timer(30, new ActionListener() {
 	            private int charIndex = 0;
 
 	            @Override
@@ -298,16 +287,18 @@ public void PrologueView1() {
 		getContentPane().removeAll();
 		String name = new String(TitleView.name.getText());
 		String text2 =
+		"今後、我が社も大きなプロジェクトを\n担当する予定だ。\n"+
+		"実は君に、そのリーダーを任せたい」\n\n"+
 		name + "\n"+
 		"「なんと、私ごときに…。\nありがたき幸せッッ…！」\n"+
 		"\n"+
 		"らいおん社長\n"+
-		"「そして、もうひとつ…。\n\n"+
+		"「そして、もうひとつ…。\n"+
 		"この会社を、明日から君に任せたい。\n"+
-		"老兵は去るのみ、\n未来を若いうさぎに託したいのだ。\n\n"+
-		"なってくれるね？\n\n株式会社『ZOO』の新しい社長に…」\n\n"+
+		"老兵は去るのみ、\n未来を若いうさぎに託したいのだ。\n"+
+		"なってくれるね？\n株式会社『ZOO』の新しい社長に…」\n\n"+
 
-		"静かに頷き、頬を涙で濡らす「"+name+"」。\n\n"+
+		"静かに頷き、頬を涙で濡らす「"+name+"」。\n"+
 		"そのうさぎの赤い瞳は、\n『ZOO』の行く末を明るく照らしていた…。\n\n\n\n\n\n\n\n\n\n\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n";
 
 	        TextAndImagePanel panel = new TextAndImagePanel("src/maingame/resources/boss1.jpg",text2);
@@ -339,7 +330,7 @@ public void PrologueView1() {
 	        this.setVisible(true);
 	        ClientMain.frame.setHP(10);
 	        // テキストを1文字ずつ0.1秒ごとに表示するためのタイマーをセットアップ
-	        Timer timer = new Timer(50, new ActionListener() {
+	        Timer timer = new Timer(30, new ActionListener() {
 	            private int charIndex = 0;
 
 	            @Override
