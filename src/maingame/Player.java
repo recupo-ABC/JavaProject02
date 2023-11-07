@@ -75,7 +75,7 @@ public String useTechnique() {
 
 public String useTechnique1() {
     Random random = new Random();
-    int randomValue = random.nextInt(2);
+    int randomValue = random.nextInt(3);
     if (randomValue == 0) {
         return "往復ビンタ！";
     } else if(randomValue == 1) {

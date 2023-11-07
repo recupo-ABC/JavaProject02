@@ -337,8 +337,7 @@ public void PrologueView1() {
 		    panel.add(skipButton);
 	        // フレームを表示
 	        this.setVisible(true);
-	        end = true;
-
+	        ClientMain.frame.setHP(10);
 	        // テキストを1文字ずつ0.1秒ごとに表示するためのタイマーをセットアップ
 	        Timer timer = new Timer(50, new ActionListener() {
 	            private int charIndex = 0;

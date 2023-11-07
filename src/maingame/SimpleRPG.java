@@ -227,9 +227,14 @@ class SimpleRPG extends JPanel implements ActionListener {
                 	@Override
                 	public void actionPerformed(ActionEvent paramActionEvent) {
                 	// ここに1秒後に実行する処理
-                		ClientMain.frame.changeView(new SimpleRPG());
-                	}
-                	});
+                		if(ClientMain.frame.getHP() >= 20) {
+	                		ClientMain.frame.EndingView();
+	                	}else if(ClientMain.frame.getHP() <= 0){
+	                		ClientMain.frame.EndingView();
+	                	}else{
+	                		ClientMain.frame.changeView(new SimpleRPG());	}
+	                	}
+	                	});
                 	timer.setRepeats(false); // 1回だけ実行する場合
                 	timer.start();
                 
@@ -271,9 +276,14 @@ class SimpleRPG extends JPanel implements ActionListener {
             	@Override
             	public void actionPerformed(ActionEvent paramActionEvent) {
             	// ここに1秒後に実行する処理
-            		ClientMain.frame.changeView(new SimpleRPG());
-            	}
-            	});
+            		if(ClientMain.frame.getHP() >= 20) {
+                		ClientMain.frame.EndingView();
+                	}else if(ClientMain.frame.getHP() <= 0){
+                		ClientMain.frame.EndingView();
+                	}else{
+                		ClientMain.frame.changeView(new SimpleRPG());	}
+                	}
+                	});
             	timer.setRepeats(false); // 1回だけ実行する場合
             	timer.start();
             
