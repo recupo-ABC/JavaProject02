@@ -26,7 +26,7 @@ class SimpleRPG extends JPanel implements ActionListener {
     private Enemy enemyX;
     private Enemy enemyY;
     private boolean inBattle = false;
-    private String battleMessage = "";
+    private String battleMessage = "向かい側の壁のどこかに社長室への扉があります。\nカーソルキーを動かして向かい側の壁へ向かいましょう！";
     private long battleMessageTimestamp = 0;
     private boolean showEnemy = false;
     private boolean showChoices = false; // NEW: 選択肢を表示するかどうかのフラグ
@@ -184,7 +184,7 @@ class SimpleRPG extends JPanel implements ActionListener {
     
          // 画像の読み込み
         try {
-            battleModeBackground = ImageIO.read(getClass().getResource("resources/battle_background.jpg"));
+            battleModeBackground = ImageIO.read(getClass().getResource("resources/battle_background.png"));
         } catch (IOException e) {
             e.printStackTrace();
         }

@@ -9,6 +9,7 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
+import java.net.URL;
 
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
@@ -28,14 +29,12 @@ public class TitleView extends JPanel implements ActionListener{
 	static JButton startButton;
 	Player player;
     public TitleView() {
-    	
-    	backgroundImage = Toolkit.getDefaultToolkit().createImage("src/maingame/resources/画像３.jpg");
-    	startButton = new JButton("");
-    	ImageIcon buttonIcon = new ImageIcon("src/maingame/resources/133.114.249.105 (1).gif");
+    	URL bgi = getClass().getResource("resources/gazo.png");
+    	backgroundImage = Toolkit.getDefaultToolkit().createImage(bgi);
+    	ImageIcon icon = new ImageIcon(getClass().getResource("resources/133.114.249.105 (1).gif"));
+    	startButton = new JButton();
     	JLabel title = new JLabel("イキリーマン伝説");
         JLabel title1= new JLabel("～シン・社会人へのキャリアップ～");
-//        JLabel title2= new JLabel("プレイヤーネームを入力して下さい");
-
         label = new JLabel("");
         label1 = new JLabel("");
         name = new JTextField("", 20);
@@ -45,8 +44,7 @@ public class TitleView extends JPanel implements ActionListener{
         setFocusable(true);
         setVisible(true);
         setBounds(0,0,800,600);
-        
-        startButton.setIcon(buttonIcon);
+        startButton.setIcon(icon);
         startButton.setBounds(445, 467, 63, 36);
         startButton.setContentAreaFilled(false);
         startButton.setBorderPainted(false);
@@ -73,7 +71,8 @@ public class TitleView extends JPanel implements ActionListener{
     }
 	public void actionPerformed(ActionEvent e) {
         if (e.getActionCommand().equals("start")) { 
-        	GameFrame.playSoundEffect("src/maingame/resources/シャキーン1.wav");
+        	URL url = getClass().getResource("resources/shakin.wav");
+        	GameFrame.playSoundEffect(url);
         	label.setText(name.getText());
         	remove(startButton);
         	remove(name);

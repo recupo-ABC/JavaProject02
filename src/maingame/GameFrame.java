@@ -2,12 +2,15 @@ package maingame;
 
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.io.File;
 import java.io.IOException;
+import java.net.MalformedURLException;
+import java.net.URL;
 
+import javax.sound.sampled.AudioFormat;
 import javax.sound.sampled.AudioInputStream;
 import javax.sound.sampled.AudioSystem;
 import javax.sound.sampled.Clip;
+import javax.sound.sampled.DataLine;
 import javax.sound.sampled.LineUnavailableException;
 import javax.sound.sampled.UnsupportedAudioFileException;
 import javax.swing.ImageIcon;
@@ -66,19 +69,38 @@ public class GameFrame extends JFrame {
 		this.hp = hp;
 	}
 	
-	public static void playSoundEffect(String soundFilePath) {
-        try {
-            AudioInputStream audioStream = AudioSystem.getAudioInputStream(new File(soundFilePath));
-            Clip clip = AudioSystem.getClip();
-            clip.open(audioStream);
-            clip.start();
-        } catch (UnsupportedAudioFileException | LineUnavailableException | IOException e) {
-            e.printStackTrace();
-        }
+	public static void playSoundEffect(URL url) {
+		try (AudioInputStream ais = AudioSystem.getAudioInputStream(url)){
+			
+			//ファイルの形式取得
+			AudioFormat af = ais.getFormat();
+			
+			//単一のオーディオ形式を含む指定した情報からデータラインの情報オブジェクトを構築
+			DataLine.Info dataLine = new DataLine.Info(Clip.class,af);
+			
+			//指定された Line.Info オブジェクトの記述に一致するラインを取得
+			Clip c = (Clip)AudioSystem.getLine(dataLine);
+			
+			//再生準備完了
+			c.open(ais);
+			c.start();
+			return;
+		} catch (MalformedURLException e) {
+			e.printStackTrace();
+		} catch (UnsupportedAudioFileException e) {
+			e.printStackTrace();
+		} catch (IOException e) {
+			e.printStackTrace();
+		} catch (LineUnavailableException e) {
+			e.printStackTrace();
+		}
+		return;
     }
 	
 	public void PrologueView() {
 		String name = new String(TitleView.name.getText());
+		URL url = getClass().getResource("resources/prologue1.png");
+		URL url1 = getClass().getResource("resources/skip_b.png");
 		String text ="“イキり”…。それは、隠し持つガラスのハートの表れ…。\n\n"
 	            + 
 	            "ウサギのような小心者の新卒サラリーマン「"+ name+ "」は、\n"
@@ -93,10 +115,10 @@ public class GameFrame extends JFrame {
 	            + "イキった顔で社長室へと向かう「うさお」。\n\n"
 	            + "その背中に、きりん課長が声をかける。\n";
 	     // カスタムパネルを作成してフレームに追加
-	        TextAndImagePanel panel = new TextAndImagePanel("src/maingame/resources/prologue2.png", TitleView.text);
+	        TextAndImagePanel panel = new TextAndImagePanel(url, TitleView.text);
 	        this.add(panel);
 	     // スキップボタンの作成
-		    JButton skipButton = new JButton(new ImageIcon("src/maingame/resources/skip_b.png"));
+		    JButton skipButton = new JButton(new ImageIcon(url1));
 
 		    int buttonWidth = 200;
 		    int buttonHeight = 80;
@@ -140,8 +162,8 @@ public void PrologueView1() {
 		
 		String name = TitleView.name.getText();
 		getContentPane().removeAll();
-
-		
+		URL url = getClass().getResource("resources/prologue2.png");
+		URL url1 = getClass().getResource("resources/start-button.png");
 		String text ="「社長室の前のミーティングルームで、\n"
 	            + "お前はパワハラ上司や\n"
 				+"クレーマークライアントに出会うだろう。\n\n"
@@ -160,14 +182,14 @@ public void PrologueView1() {
 	            "果たして「"+name+"」はシン・社会人となり、\n"
 	            +"社長に対面できるのだろうか…。\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n";
 	     // カスタムパネルを作成してフレームに追加
-	        TextAndImagePanel panel = new TextAndImagePanel("src/maingame/resources/prologue1.png", TitleView.text);
+	        TextAndImagePanel panel = new TextAndImagePanel(url, TitleView.text);
 	        panel.setLayout(null); 
 		    // 重要！レイアウトマネージャを無効化
 		    
 		    this.add(panel);
 		    
 		 // スキップボタンの作成
-		    JButton skipButton = new JButton(new ImageIcon("src/maingame/resources/start-button.png"));
+		    JButton skipButton = new JButton(new ImageIcon(url1));
 
 		    int buttonWidth = 300;
 		    int buttonHeight = 80;
@@ -211,11 +233,12 @@ public void PrologueView1() {
 	public void EndingView() {
 		getContentPane().removeAll();
 		String name = new String(TitleView.name.getText());
+		URL url = getClass().getResource("resources/boss1.png");
+		URL url1 = getClass().getResource("resources/skip_b.png");
 		String text1 = 
 		"らいおん社長\n" +
 		"「待っていたよ…。『"+name+"』くん…」\n\n"+
-		name + "\n"+
-		"「大変お待たせして、申し訳ありませんでした！\n" +
+		name + "\n"+	
 		"らいおん社長ッッ…！」\n\n"+
 		"らいおん社長\n"+
 		"「『男子たるもの、\n三日会わざれば刮目して見よ』と言うが…。\n"+
@@ -237,14 +260,14 @@ public void PrologueView1() {
 //		静かに頷き、頬を涙で濡らす「うさお」。
 //		そのうさぎの赤い瞳は、『ZOO』の行く末を明るく照らしていた…。
 
-	        TextAndImagePanel panel = new TextAndImagePanel("src/maingame/resources/boss1.jpg",text1);
+	        TextAndImagePanel panel = new TextAndImagePanel(url,text1);
 	        add(panel);
 	        panel.requestFocusInWindow();
 	        validate();
 	     // スキップボタンの作成
 	        panel.setLayout(null); 
 		    // 重要！レイアウトマネージャを無効化
-		    JButton skipButton = new JButton(new ImageIcon("src/maingame/resources/skip_b.png"));
+		    JButton skipButton = new JButton(new ImageIcon(url1));
 
 		    int buttonWidth = 200;
 		    int buttonHeight = 80;
@@ -286,11 +309,13 @@ public void PrologueView1() {
 	public void EndingView1() {
 		getContentPane().removeAll();
 		String name = new String(TitleView.name.getText());
+		URL url1 = getClass().getResource("resources/skip_b.png");
+		URL url = getClass().getResource("resources/boss1.png");
 		String text2 =
 		"今後、我が社も大きなプロジェクトを\n担当する予定だ。\n"+
 		"実は君に、そのリーダーを任せたい」\n\n"+
 		name + "\n"+
-		"「なんと、私ごときに…。\nありがたき幸せッッ…！」\n"+
+		"「私ごときに…。\nありがたき幸せッッ…！」\n"+
 		"\n"+
 		"らいおん社長\n"+
 		"「そして、もうひとつ…。\n"+
@@ -301,12 +326,12 @@ public void PrologueView1() {
 		"静かに頷き、頬を涙で濡らす「"+name+"」。\n"+
 		"そのうさぎの赤い瞳は、\n『ZOO』の行く末を明るく照らしていた…。\n\n\n\n\n\n\n\n\n\n\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n";
 
-	        TextAndImagePanel panel = new TextAndImagePanel("src/maingame/resources/boss1.jpg",text2);
+	        TextAndImagePanel panel = new TextAndImagePanel(url,text2);
 	        add(panel);
 	        panel.requestFocusInWindow();
 	        validate();
 	     // スキップボタンの作成
-		    JButton skipButton = new JButton(new ImageIcon("src/maingame/resources/skip_b.png"));
+		    JButton skipButton = new JButton(new ImageIcon(url));
 
 		    int buttonWidth = 200;
 		    int buttonHeight = 80;

@@ -4,8 +4,9 @@ import java.awt.Color;
 import java.awt.Font;
 import java.awt.Graphics;
 import java.awt.Image;
+import java.awt.Toolkit;
+import java.net.URL;
 
-import javax.swing.ImageIcon;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 
@@ -15,13 +16,10 @@ public class TextAndImagePanel extends JPanel {
     private StringBuilder currentLine = new StringBuilder();
     private StringBuilder currentText = new StringBuilder();
 
-    public TextAndImagePanel(String string, String initialText) {
-        ImageIcon icon = new ImageIcon(string);
-        image = icon.getImage();
+    public TextAndImagePanel(URL url,String initialText) {
+    	image = Toolkit.getDefaultToolkit().createImage(url);
         currentText.append(initialText);
     }
-
-
 
 	@Override
     protected void paintComponent(Graphics g) {
