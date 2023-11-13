@@ -29,7 +29,7 @@ public class TitleView extends JPanel implements ActionListener{
 	static JButton startButton;
 	Player player;
     public TitleView() {
-    	URL bgi = getClass().getResource("resources/gazo.png");
+    	URL bgi = getClass().getResource("resources/titleview.png");
     	backgroundImage = Toolkit.getDefaultToolkit().createImage(bgi);
     	ImageIcon icon = new ImageIcon(getClass().getResource("resources/133.114.249.105 (1).gif"));
     	startButton = new JButton();
@@ -74,6 +74,7 @@ public class TitleView extends JPanel implements ActionListener{
         	URL url = getClass().getResource("resources/shakin.wav");
         	GameFrame.playSoundEffect(url);
         	label.setText(name.getText());
+//        	AccountDAO.Insert();
         	remove(startButton);
         	remove(name);
         	ClientMain.frame.PrologueView();

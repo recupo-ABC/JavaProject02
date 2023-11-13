@@ -67,7 +67,7 @@ public void move() { // シグネチャを変更
 public String useTechnique() {
     Random random = new Random();
     if (random.nextBoolean()) {
-        return "イキり舌打ち！";
+        return "イキり耳塞ぎ！";
     } else {
         return "おとなぺこぺこ（笑）";
     }
@@ -77,11 +77,11 @@ public String useTechnique1() {
     Random random = new Random();
     int randomValue = random.nextInt(3);
     if (randomValue == 0) {
-        return "往復ビンタ！";
+        return "イキりタックル！";
     } else if(randomValue == 1) {
         return "おとなぺこぺこ（笑）";
     }else if(randomValue == 2) {
-    	return "のしかかり！";
+    	return "イキり中指！";
     }
 	return null;
 }

@@ -97,13 +97,190 @@ public class GameFrame extends JFrame {
 		return;
     }
 	
+public void run() {
+		
+		String name = TitleView.name.getText();
+		getContentPane().removeAll();
+		URL url = getClass().getResource("resources/runaway2.png");
+		String text =name + "はめんどうなので逃げた\n\n\n\n\n\n\n";
+	     // カスタムパネルを作成してフレームに追加
+		
+	        TextAndImagePanel2 panel = new TextAndImagePanel2(url, TitleView.text);	    
+		    this.add(panel);
+		    
+		    // フレームを表示
+		    this.setVisible(true);
+
+	        // テキストを1文字ずつ0.1秒ごとに表示するためのタイマーをセットアップ
+	        Timer timer = new Timer(50, new ActionListener() {
+	            private int charIndex = 0;
+
+	            @Override
+	            public void actionPerformed(ActionEvent e) {
+	                if (charIndex < text.length()) {
+	                	panel.appendChar(text.charAt(charIndex++));
+	                } else {
+	                    ((Timer) e.getSource()).stop();
+	                    // プロローグ終了後、Ending画面に遷移
+	                    if(ClientMain.frame.getHP() <= 3) {
+	                    	BadEndingView();
+	                    }else {
+	                    	changeView(new SimpleRPG());
+	                    }
+	                }
+	            }
+	        });
+	        timer.start();
+	    }
+
+	
+public void pekopeko() {
+		
+		String name = TitleView.name.getText();
+		getContentPane().removeAll();
+		URL url = getClass().getResource("resources/pekopeko.png");
+		String text =name + "は感情をグッと堪え、大人の対応、評価が上がりHPが5増えた\n\n\n\n\n\n\n";
+	     // カスタムパネルを作成してフレームに追加
+	        TextAndImagePanel3 panel = new TextAndImagePanel3(url, TitleView.text);	    
+		    this.add(panel);
+		    
+		    // フレームを表示
+		    this.setVisible(true);
+
+	        // テキストを1文字ずつ0.1秒ごとに表示するためのタイマーをセットアップ
+	        Timer timer = new Timer(50, new ActionListener() {
+	            private int charIndex = 0;
+
+	            @Override
+	            public void actionPerformed(ActionEvent e) {
+	                if (charIndex < text.length()) {
+	                	panel.appendChar(text.charAt(charIndex++));
+	                } else {
+	                    ((Timer) e.getSource()).stop();
+	                    // プロローグ終了後、Ending画面に遷移
+	                    if(ClientMain.frame.getHP() >= 20) {
+	                    	EndingView();
+	                    }else {
+	                    	changeView(new SimpleRPG());
+	                    }
+	                }
+	            }
+	        });
+	        timer.start();
+	    }
+
+	
+	public void kikoenai() {
+		
+		String name = TitleView.name.getText();
+		getContentPane().removeAll();
+		URL url = getClass().getResource("resources/kikoena~i2.png");
+		String text =name + "は話にならないので耳を塞いだ、後で怒られてしまいHPが5減った\n\n\n\n\n\n\n";
+	     // カスタムパネルを作成してフレームに追加
+	        TextAndImagePanel2 panel = new TextAndImagePanel2(url, TitleView.text);	    
+		    this.add(panel);
+		    
+		    // フレームを表示
+		    this.setVisible(true);
+
+	        // テキストを1文字ずつ0.1秒ごとに表示するためのタイマーをセットアップ
+	        Timer timer = new Timer(50, new ActionListener() {
+	            private int charIndex = 0;
+
+	            @Override
+	            public void actionPerformed(ActionEvent e) {
+	                if (charIndex < text.length()) {
+	                	panel.appendChar(text.charAt(charIndex++));
+	                } else {
+	                    ((Timer) e.getSource()).stop();
+	                    // プロローグ終了後、Ending画面に遷移
+	                    if(ClientMain.frame.getHP() <= 0) {
+	                    	BadEndingView();
+	                    }else {
+	                    	changeView(new SimpleRPG());
+	                    }
+	                }
+	            }
+	        });
+	        timer.start();
+	    }
+
+	public void tackle() {
+	
+	String name = TitleView.name.getText();
+	getContentPane().removeAll();
+	URL url = getClass().getResource("resources/tackle.png");
+	String text =name + "は我慢出来ずに飛び掛かった。\n当たり前だが、怒られてHPが5減った\n\n\n\n\n\n\n";
+     // カスタムパネルを作成してフレームに追加
+        TextAndImagePanel2 panel = new TextAndImagePanel2(url, TitleView.text);	    
+	    this.add(panel);
+	    
+	    // フレームを表示
+	    this.setVisible(true);
+
+        // テキストを1文字ずつ0.1秒ごとに表示するためのタイマーをセットアップ
+        Timer timer = new Timer(50, new ActionListener() {
+            private int charIndex = 0;
+
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                if (charIndex < text.length()) {
+                	panel.appendChar(text.charAt(charIndex++));
+                } else {
+                    ((Timer) e.getSource()).stop();
+                    // プロローグ終了後、Ending画面に遷移
+                    if(ClientMain.frame.getHP() <= 0) {
+                    	BadEndingView();
+                    }else {
+                    	changeView(new SimpleRPG());
+                    }
+                }
+            }
+        });
+        timer.start();
+    }
+	public void nakayubi() {
+	
+	String name = TitleView.name.getText();
+	getContentPane().removeAll();
+	URL url = getClass().getResource("resources/nakayubi2.png");
+	String text =name + "は我慢出来ずに中指を立てて挑発した。\n後で怒られてしまいHPが5減った\n\n\n\n\n\n\n";
+     // カスタムパネルを作成してフレームに追加
+        TextAndImagePanel2 panel = new TextAndImagePanel2(url, TitleView.text);	    
+	    this.add(panel);
+	    
+	    // フレームを表示
+	    this.setVisible(true);
+
+        // テキストを1文字ずつ0.1秒ごとに表示するためのタイマーをセットアップ
+        Timer timer = new Timer(50, new ActionListener() {
+            private int charIndex = 0;
+
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                if (charIndex < text.length()) {
+                	panel.appendChar(text.charAt(charIndex++));
+                } else {
+                    ((Timer) e.getSource()).stop();
+                    // プロローグ終了後、Ending画面に遷移
+                    if(ClientMain.frame.getHP() <= 0) {
+                    	BadEndingView();
+                    }else {
+                    	changeView(new SimpleRPG());
+                    }
+                }
+            }
+        });
+        timer.start();
+    }
+
 	public void PrologueView() {
 		String name = new String(TitleView.name.getText());
 		URL url = getClass().getResource("resources/prologue1.png");
 		URL url1 = getClass().getResource("resources/skip_b.png");
-		String text ="“イキり”…。それは、隠し持つガラスのハートの表れ…。\n\n"
+		String text ="“イキり”…。\nそれは、隠し持つ\nガラスのハートの表れ…。\n\n"
 	            + 
-	            "ウサギのような小心者の新卒サラリーマン「"+ name+ "」は、\n"
+	            "ウサギのような\n小心者の新卒サラリーマン\n「"+ name+ "」は、\n"
 	            + 
 	            "今日もイキりまくったファッションで\n"
 	            + "IT企業「ZOO」に二日酔い＆大遅刻で現れた。\n\n"
@@ -112,7 +289,7 @@ public class GameFrame extends JFrame {
 	            + 
 	            "“そんな…まさか、遅刻ぐらいで社長室へ…（涙）”\n"
 	            + "ウサギのハートをびくびく震わせながらも、\n"
-	            + "イキった顔で社長室へと向かう「うさお」。\n\n"
+	            + "イキった顔で社長室へと向かう「"+ name + "」。\n\n"
 	            + "その背中に、きりん課長が声をかける。\n";
 	     // カスタムパネルを作成してフレームに追加
 	        TextAndImagePanel panel = new TextAndImagePanel(url, TitleView.text);
@@ -143,7 +320,7 @@ public class GameFrame extends JFrame {
 
 
 	        // テキストを1文字ずつ0.1秒ごとに表示するためのタイマーをセットアップ
-	        Timer timer = new Timer(30, new ActionListener() {
+	        Timer timer = new Timer(35, new ActionListener() {
 	            private int charIndex = 0;
 
 	            @Override
@@ -164,17 +341,16 @@ public void PrologueView1() {
 		getContentPane().removeAll();
 		URL url = getClass().getResource("resources/prologue2.png");
 		URL url1 = getClass().getResource("resources/start-button.png");
-		String text ="「社長室の前のミーティングルームで、\n"
-	            + "お前はパワハラ上司や\n"
-				+"クレーマークライアントに出会うだろう。\n\n"
+		String text ="きりん課長\n「社長室の前のミーティングルームで、\n"
+	            + "　お前はパワハラ上司や\n"
+				+"　クレーマークライアントに出会うだろう。\n\n"
 	            +
-	             "そこで大人な対応を続けることができれば、\n"
-	            + "イキりから真の社会人になれたと認められる。\n\n"
+	             "　そこで大人な対応を続けることができれば、\n"
+	            + "　イキりから真の社会人になれたと認められる。\n\n"
 	            +
-	             "そして、そのミッションを\n"
-	            +"クリアすることができれば \n"	            
-	            + "向かいの壁のどこかにある、\n"
-	            +"社長室への扉が開くとのことだ…。」\n\n"	           
+	             "　そして、そのミッションをクリアできれば \n"	            
+	            + "　向かいの壁のどこかにある、\n"
+	            +"　社長室への扉が開くとのことだ…。」\n\n"	           
                 +
 	            "小物なハートを震わせながら、\n"
 	            +"平静を装いミーティングルームへ向かう「"+name+"」。\n\n"
@@ -213,7 +389,7 @@ public void PrologueView1() {
 		    this.setVisible(true);
 
 	        // テキストを1文字ずつ0.1秒ごとに表示するためのタイマーをセットアップ
-	        Timer timer = new Timer(30, new ActionListener() {
+	        Timer timer = new Timer(35, new ActionListener() {
 	            private int charIndex = 0;
 
 	            @Override
@@ -230,10 +406,65 @@ public void PrologueView1() {
 	        timer.start();
 	    }
 	
+public void BadEndingView() {
+	getContentPane().removeAll();
+	String name = new String(TitleView.name.getText());
+	URL url = getClass().getResource("resources/failure_epilogue.png");
+	URL url1 = getClass().getResource("resources/skip_b.png");
+	String text1 = 
+	"あの程度でクビかよ・・・転職活動、メンドクセェ～";
+
+        TextAndImagePanel panel = new TextAndImagePanel(url,text1);
+        add(panel);
+        panel.requestFocusInWindow();
+        validate();
+     // スキップボタンの作成
+        panel.setLayout(null); 
+	    // 重要！レイアウトマネージャを無効化
+	    JButton skipButton = new JButton(new ImageIcon(url1));
+
+	    int buttonWidth = 200;
+	    int buttonHeight = 80;
+
+	    skipButton.setBounds(500,450,buttonWidth,buttonHeight);
+	    skipButton.setOpaque(false);
+	    skipButton.setContentAreaFilled(false);
+	    skipButton.setBorderPainted(false);
+
+	   
+
+	    skipButton.addActionListener(new ActionListener() {
+	        @Override
+	        public void actionPerformed(ActionEvent e) {
+	            ClientMain.frame.changeView(new TitleView());
+	        }
+	    });
+        // フレームを表示
+        this.setVisible(true);
+        panel.add(skipButton);
+
+        // テキストを1文字ずつ0.1秒ごとに表示するためのタイマーをセットアップ
+        Timer timer = new Timer(30, new ActionListener() {
+            private int charIndex = 0;
+
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                if (charIndex < text1.length()) {
+                	panel.appendChar(text1.charAt(charIndex++));
+                } else {
+                    ((Timer) e.getSource()).stop();
+                    // プロローグ終了後、Ending画面に遷移
+                    
+                }
+            }
+        });
+        timer.start();
+    }
+
 	public void EndingView() {
 		getContentPane().removeAll();
 		String name = new String(TitleView.name.getText());
-		URL url = getClass().getResource("resources/boss1.png");
+		URL url = getClass().getResource("resources/success_epilogue.png");
 		URL url1 = getClass().getResource("resources/skip_b.png");
 		String text1 = 
 		"らいおん社長\n" +
@@ -310,7 +541,7 @@ public void PrologueView1() {
 		getContentPane().removeAll();
 		String name = new String(TitleView.name.getText());
 		URL url1 = getClass().getResource("resources/skip_b.png");
-		URL url = getClass().getResource("resources/boss1.png");
+		URL url = getClass().getResource("resources/success_epilogue.png");
 		String text2 =
 		"今後、我が社も大きなプロジェクトを\n担当する予定だ。\n"+
 		"実は君に、そのリーダーを任せたい」\n\n"+
@@ -331,7 +562,7 @@ public void PrologueView1() {
 	        panel.requestFocusInWindow();
 	        validate();
 	     // スキップボタンの作成
-		    JButton skipButton = new JButton(new ImageIcon(url));
+		    JButton skipButton = new JButton(new ImageIcon(url1));
 
 		    int buttonWidth = 200;
 		    int buttonHeight = 80;
