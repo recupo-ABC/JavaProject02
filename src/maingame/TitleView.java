@@ -72,7 +72,7 @@ public class TitleView extends JPanel implements ActionListener{
 	public void actionPerformed(ActionEvent e) {
         if (e.getActionCommand().equals("start")) { 
         	URL url = getClass().getResource("resources/shakin.wav");
-        	GameFrame.playSoundEffect(url);
+        	ClientMain.frame.playSoundEffect(url);
         	label.setText(name.getText());
 //        	AccountDAO.Insert();
         	remove(startButton);

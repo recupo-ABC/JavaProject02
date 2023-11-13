@@ -12,6 +12,7 @@ import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.awt.image.BufferedImage;
 import java.io.IOException;
+import java.net.URL;
 
 import javax.imageio.ImageIO;
 import javax.swing.JPanel;
@@ -33,11 +34,14 @@ class SimpleRPG extends JPanel implements ActionListener {
     private int currentChoice = 0;  
     boolean monster = false;// NEW: 現在の選択肢 (0: 相手に対応する, 1: 逃げる)
     long currentTime = System.currentTimeMillis();
+    URL url = getClass().getResource("resources/feeldBGM.wav");
+    URL url1 = getClass().getResource("resources/RPG_Battle_04.wav"); 
     // 障害物の配列を追加
     private Obstacle[] obstacles;
     private BufferedImage battleModeBackground;
     String name = new String(TitleView.name.getText());
     public SimpleRPG() {
+    	ClientMain.frame.playSoundEffect(url);
         this.setFocusable(true);
         
         this.addKeyListener(new KeyAdapter() {
@@ -385,6 +389,8 @@ private void checkCollisions() {
         Rectangle enemyBounds = new Rectangle(currentEnemy.x, currentEnemy.y, currentEnemy.SIZE, currentEnemy.SIZE);
         if (playerBounds.intersects(enemyBounds)) {
             inBattle = true;
+            ClientMain.frame.stopMusic();
+            ClientMain.frame.playSoundEffect(url1);
         }
 
         // 障害物との衝突判定を追加

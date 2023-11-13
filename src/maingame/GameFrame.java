@@ -25,6 +25,7 @@ public class GameFrame extends JFrame {
 	static int Z = 1;
 	private int hp = 10;
 	boolean end = false;
+	private static Clip clip;
     public GameFrame() {
         setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
         setTitle("TypingEats");
@@ -69,7 +70,7 @@ public class GameFrame extends JFrame {
 		this.hp = hp;
 	}
 	
-	public static void playSoundEffect(URL url) {
+	public void playSoundEffect(URL url) {
 		try (AudioInputStream ais = AudioSystem.getAudioInputStream(url)){
 			
 			//ファイルの形式取得
@@ -79,11 +80,11 @@ public class GameFrame extends JFrame {
 			DataLine.Info dataLine = new DataLine.Info(Clip.class,af);
 			
 			//指定された Line.Info オブジェクトの記述に一致するラインを取得
-			Clip c = (Clip)AudioSystem.getLine(dataLine);
+			clip = (Clip)AudioSystem.getLine(dataLine);
 			
 			//再生準備完了
-			c.open(ais);
-			c.start();
+			clip.open(ais);
+			clip.start();
 			return;
 		} catch (MalformedURLException e) {
 			e.printStackTrace();
@@ -95,6 +96,15 @@ public class GameFrame extends JFrame {
 			e.printStackTrace();
 		}
 		return;
+	}
+
+	
+	public void stopMusic() {
+        if (clip != null) {
+            clip.stop();
+            clip.close();
+            clip = null;
+        }
     }
 	
 public void run() {
