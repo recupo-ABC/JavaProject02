@@ -76,7 +76,6 @@ public String getEncounterMessage() {
 public void move(Player player) {
     prevX = x;
     prevY = y;
-
     if (x < player.x) x += SPEED;
     else if (x > player.x) x -= SPEED;
 
@@ -95,7 +94,6 @@ public void move(Player player) {
 private void findClearPath(Obstacle obstacle) {
     int[] dx = {-SPEED, 0, SPEED, 0};
     int[] dy = {0, -SPEED, 0, SPEED};
-
     for (int i = 0; i < 4; i++) {
         int newX = x + dx[i];
         int newY = y + dy[i];

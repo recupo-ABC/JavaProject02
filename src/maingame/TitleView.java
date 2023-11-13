@@ -56,16 +56,8 @@ public class TitleView extends JPanel implements ActionListener{
         title1.setBounds(200,300,500,100);
         title1.setForeground(Color.BLACK);
         title.setBounds(260,250,400,100);
-//        title2.setBounds(250,500,300,30);
-//        title2.setForeground(Color.LIGHT_GRAY);
         title.setFont(new Font("SansSerif", Font.BOLD, 32));
         title1.setFont(new Font("SansSerif", Font.BOLD, 24));
-//      title2.setFont(new Font("SansSerif", Font.BOLD, 18));
-//        add(title);
-//        add(title1);
-//       add(title2);
-
-
         ClientMain.frame.getRootPane().setDefaultButton(startButton);
         myKeyListener = new MyKeyListener(this);
     }

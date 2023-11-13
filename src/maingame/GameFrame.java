@@ -108,7 +108,7 @@ public class GameFrame extends JFrame {
     }
 	
 public void run() {
-		
+		ClientMain.frame.stopMusic();
 		String name = TitleView.name.getText();
 		getContentPane().removeAll();
 		URL url = getClass().getResource("resources/runaway2.png");
@@ -145,7 +145,7 @@ public void run() {
 
 	
 public void pekopeko() {
-		
+		ClientMain.frame.stopMusic();
 		String name = TitleView.name.getText();
 		getContentPane().removeAll();
 		URL url = getClass().getResource("resources/pekopeko.png");
@@ -181,7 +181,7 @@ public void pekopeko() {
 
 	
 	public void kikoenai() {
-		
+		ClientMain.frame.stopMusic();
 		String name = TitleView.name.getText();
 		getContentPane().removeAll();
 		URL url = getClass().getResource("resources/kikoena~i2.png");
@@ -216,7 +216,7 @@ public void pekopeko() {
 	    }
 
 	public void tackle() {
-	
+	ClientMain.frame.stopMusic();
 	String name = TitleView.name.getText();
 	getContentPane().removeAll();
 	URL url = getClass().getResource("resources/tackle.png");
@@ -250,7 +250,7 @@ public void pekopeko() {
         timer.start();
     }
 	public void nakayubi() {
-	
+	ClientMain.frame.stopMusic();
 	String name = TitleView.name.getText();
 	getContentPane().removeAll();
 	URL url = getClass().getResource("resources/nakayubi2.png");
@@ -423,7 +423,7 @@ public void BadEndingView() {
 	URL url1 = getClass().getResource("resources/skip_b.png");
 	String text1 = 
 	"あの程度でクビかよ・・・転職活動、メンドクセェ～";
-
+	ClientMain.frame.setHP(10);
         TextAndImagePanel panel = new TextAndImagePanel(url,text1);
         add(panel);
         panel.requestFocusInWindow();

@@ -39,6 +39,8 @@ class SimpleRPG extends JPanel implements ActionListener {
     // 障害物の配列を追加
     private Obstacle[] obstacles;
     private BufferedImage battleModeBackground;
+    private BufferedImage backgroundImage;
+    
     String name = new String(TitleView.name.getText());
     public SimpleRPG() {
     	ClientMain.frame.playSoundEffect(url);
@@ -182,21 +184,22 @@ class SimpleRPG extends JPanel implements ActionListener {
          // 画像の読み込み
         try {
             battleModeBackground = ImageIO.read(getClass().getResource("resources/battle_background.png"));
+            backgroundImage = ImageIO.read(getClass().getResource("resources/office_field.png"));
         } catch (IOException e) {
             e.printStackTrace();
         }
         
         // 障害物を初期化
         obstacles = new Obstacle[]{
-            new Obstacle(150, 80, 40, 90),
-            new Obstacle(300, 80, 40, 90),
-            new Obstacle(450, 80, 40, 90),
-            new Obstacle(600, 80, 40, 90),
+            new Obstacle(150, 90, 40, 60),
+            new Obstacle(300, 90, 40, 60),
+            new Obstacle(450, 90, 40, 60),
+            new Obstacle(600, 90, 40, 60),
             
-            new Obstacle(150, 260, 40, 90),
-            new Obstacle(300, 260, 40, 90),
-            new Obstacle(450, 260, 40, 90),
-            new Obstacle(600, 260, 40, 90)
+            new Obstacle(150, 250, 40, 60),
+            new Obstacle(300, 250, 40, 60),
+            new Obstacle(450, 250, 40, 60),
+            new Obstacle(600, 250, 40, 60)
         };
         
         initGame();
@@ -305,6 +308,7 @@ class SimpleRPG extends JPanel implements ActionListener {
     
     
 	private void initGame() {
+		
         if (player != null) {
         } else {
             player = new Player(375, 370, obstacles);// obstacles を引数として追加
@@ -369,7 +373,14 @@ class SimpleRPG extends JPanel implements ActionListener {
             }
 
         } else {
-            currentEnemy.move(player);  // 敵がプレイヤーに近づくように移動
+        	Timer timer = new Timer(3000, new ActionListener() {
+            	@Override
+            	public void actionPerformed(ActionEvent paramActionEvent) {        	                
+                	currentEnemy.move(player);  // 敵がプレイヤーに近づくように移動
+                	}       	                
+                	});
+                	timer.setRepeats(false); // 1回だけ実行する場合
+                	timer.start();
             checkCollisions();  // 衝突判定
 
             if (inBattle) {
@@ -414,8 +425,10 @@ private void checkCollisions() {
 
     @Override
     protected void paintComponent(Graphics g) {
+
         super.paintComponent(g);
 
+        g.drawImage(backgroundImage, 0, 0, this.getWidth(), getHeight() - getHeight()/5, null);
         if (inBattle) {
             int gameAreaHeight = (int) (this.getHeight() * 0.8);
             g.drawImage(battleModeBackground, 0, 0, this.getWidth(), gameAreaHeight, null);
@@ -427,7 +440,7 @@ private void checkCollisions() {
                 obstacle.draw(g);
             }
         }
-
+        
         player.draw(g);
         if (showEnemy) {
             currentEnemy.draw(g);
