@@ -81,7 +81,7 @@ class SimpleRPG extends JPanel implements ActionListener {
         	                	timer.start();
         	                
         	            } else {
-        	            	battleMessage = name + "は逃げ出した\nプライドが傷付きHPが3減った、、";
+        	            	battleMessage = "\n";
         	                battleMessageTimestamp = currentTime;
         	                showChoices = false;
         	                Timer timer = new Timer(2000, new ActionListener() {
@@ -132,7 +132,7 @@ class SimpleRPG extends JPanel implements ActionListener {
             	                	timer.start();
         	                
         	            } else {
-        	            	battleMessage = name + "は逃げ出した";
+        	            	battleMessage = "\n";
         	            	battleMessageTimestamp = currentTime;
         	                showChoices = false;
         	                Timer timer = new Timer(2000, new ActionListener() {
@@ -237,7 +237,7 @@ class SimpleRPG extends JPanel implements ActionListener {
 	                	timer.start();
                 
             } else {
-            	battleMessage = name + "は逃げ出した";           	
+            	battleMessage = "\n";           	
                 battleMessageTimestamp = currentTime;
                 showChoices = false;
                 Timer timer = new Timer(2000, new ActionListener() {
@@ -284,7 +284,7 @@ class SimpleRPG extends JPanel implements ActionListener {
                 	timer.start();
             
         } else {
-        	battleMessage = name + "は逃げ出した";
+        	battleMessage = "\n";
         	battleMessageTimestamp = currentTime;
             showChoices = false;
             Timer timer = new Timer(2000, new ActionListener() {
@@ -313,7 +313,7 @@ class SimpleRPG extends JPanel implements ActionListener {
         } else {
             player = new Player(375, 370, obstacles);// obstacles を引数として追加
         }
-        enemyX = new Enemy(0, 0, Color.RED, "モンスタークレーマーに遭遇！", obstacles); // x座標とy座標を0に設定
+        enemyX = new Enemy(-60, 0, Color.RED, "モンスタークレーマーに遭遇！", obstacles); // x座標とy座標を0に設定
         enemyY = new Enemy(770, 0, Color.BLUE, "パワハラ上司に遭遇！", obstacles); // x座標を770に、y座標を0に設定
         if(GameFrame.Z % 2 == 0) {
         	currentEnemy = enemyX;

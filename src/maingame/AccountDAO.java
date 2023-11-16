@@ -4,23 +4,21 @@ import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.PreparedStatement;
 import java.sql.SQLException;
-import java.sql.Timestamp;
 
 public class AccountDAO {
   // データベース接続に使用する情報
   static String name = TitleView.name.getText();
-  static Timestamp time = new Timestamp(System.currentTimeMillis());
-
+  static String result = ClientMain.frame.getText();
   public static void Insert() {
-	        String url = "jdbc:mysql://localhost:3306/ikiri";
-	        String user = "muku";
-	        String password = "muku";
+	        String url = "jdbc:mysql://172.16.0.212/ikiridb";
+	        String user = "JavaC";
+	        String password = "JavaC";
 
 	        try (Connection con = DriverManager.getConnection(url, user, password);
-	                PreparedStatement preStatement = con.prepareStatement("insert into playdate values(?, ?);")) {
+	                PreparedStatement preStatement = con.prepareStatement("insert into playlog (name,result) values(?,?);")) {
 	           
 	            preStatement.setString(1, name);
-	            preStatement.setTimestamp(2, time);
+	            preStatement.setString(2,result );
 	            int count = preStatement.executeUpdate();
 	        }catch (SQLException e) {
 	            e.printStackTrace();

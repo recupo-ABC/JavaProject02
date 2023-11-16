@@ -16,6 +16,7 @@ import javax.sound.sampled.UnsupportedAudioFileException;
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
 import javax.swing.JFrame;
+import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.Timer;
 import javax.swing.WindowConstants;
@@ -25,6 +26,7 @@ public class GameFrame extends JFrame {
 	static int Z = 1;
 	private int hp = 10;
 	boolean end = false;
+	private String result;
 	private static Clip clip;
     public GameFrame() {
         setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
@@ -70,6 +72,13 @@ public class GameFrame extends JFrame {
 		this.hp = hp;
 	}
 	
+	public String getText() {
+		return result;
+	}
+	
+	public void setText(String result) {
+		this.result = result;
+	}
 	public void playSoundEffect(URL url) {
 		try (AudioInputStream ais = AudioSystem.getAudioInputStream(url)){
 			
@@ -112,7 +121,9 @@ public void run() {
 		String name = TitleView.name.getText();
 		getContentPane().removeAll();
 		URL url = getClass().getResource("resources/runaway2.png");
-		String text =name + "はめんどうなので逃げた\n\n\n\n\n\n\n";
+		URL url3 = getClass().getResource("resources/男衆「イヤッホー！」.wav");
+		ClientMain.frame.playSoundEffect(url3);
+		String text =name + "は逃げ出した！\n\n\n\n\n\n\n";
 	     // カスタムパネルを作成してフレームに追加
 		
 	        TextAndImagePanel2 panel = new TextAndImagePanel2(url, TitleView.text);	    
@@ -132,7 +143,7 @@ public void run() {
 	                } else {
 	                    ((Timer) e.getSource()).stop();
 	                    // プロローグ終了後、Ending画面に遷移
-	                    if(ClientMain.frame.getHP() <= 3) {
+	                    if(ClientMain.frame.getHP() <= 0) {
 	                    	BadEndingView();
 	                    }else {
 	                    	changeView(new SimpleRPG());
@@ -149,7 +160,9 @@ public void pekopeko() {
 		String name = TitleView.name.getText();
 		getContentPane().removeAll();
 		URL url = getClass().getResource("resources/pekopeko.png");
-		String text =name + "は感情をグッと堪え、大人の対応、評価が上がりHPが5増えた\n\n\n\n\n\n\n";
+		String text =name + "は感情をグッと抑え、冷静に対応することが出来た。\nHPが5増えた。\n\n\n\n\n\n";
+		URL url2 = getClass().getResource("resources/LvUp.wav");
+    	ClientMain.frame.playSoundEffect(url2);
 	     // カスタムパネルを作成してフレームに追加
 	        TextAndImagePanel3 panel = new TextAndImagePanel3(url, TitleView.text);	    
 		    this.add(panel);
@@ -185,7 +198,9 @@ public void pekopeko() {
 		String name = TitleView.name.getText();
 		getContentPane().removeAll();
 		URL url = getClass().getResource("resources/kikoena~i2.png");
-		String text =name + "は話にならないので耳を塞いだ、後で怒られてしまいHPが5減った\n\n\n\n\n\n\n";
+		String text =name + "は話にならないので耳を塞いだ。\n後で怒られてしまいHPが5減った。\n\n\n\n\n\n\n";
+		URL url2 = getClass().getResource("resources/「これは強敵だな…！」 (online-audio-converter.com).wav");
+		ClientMain.frame.playSoundEffect(url2);
 	     // カスタムパネルを作成してフレームに追加
 	        TextAndImagePanel2 panel = new TextAndImagePanel2(url, TitleView.text);	    
 		    this.add(panel);
@@ -220,7 +235,9 @@ public void pekopeko() {
 	String name = TitleView.name.getText();
 	getContentPane().removeAll();
 	URL url = getClass().getResource("resources/tackle.png");
-	String text =name + "は我慢出来ずに飛び掛かった。\n当たり前だが、怒られてHPが5減った\n\n\n\n\n\n\n";
+	String text =name + "は我慢出来ずに飛び掛かった。\n当たり前だが、怒られてHPが5減った。\n\n\n\n\n\n\n";
+	URL url2 = getClass().getResource("resources/「ぐああーーっ！」.wav");
+	ClientMain.frame.playSoundEffect(url2);
      // カスタムパネルを作成してフレームに追加
         TextAndImagePanel2 panel = new TextAndImagePanel2(url, TitleView.text);	    
 	    this.add(panel);
@@ -239,7 +256,7 @@ public void pekopeko() {
                 } else {
                     ((Timer) e.getSource()).stop();
                     // プロローグ終了後、Ending画面に遷移
-                    if(ClientMain.frame.getHP() <= 0) {
+                    if(ClientMain.frame.getHP() <= 0) {                 	
                     	BadEndingView();
                     }else {
                     	changeView(new SimpleRPG());
@@ -254,7 +271,9 @@ public void pekopeko() {
 	String name = TitleView.name.getText();
 	getContentPane().removeAll();
 	URL url = getClass().getResource("resources/nakayubi2.png");
-	String text =name + "は我慢出来ずに中指を立てて挑発した。\n後で怒られてしまいHPが5減った\n\n\n\n\n\n\n";
+	String text =name + "は我慢出来ずに中指を立てて挑発した。\n後で怒られてしまいHPが5減った。\n\n\n\n\n\n\n";
+	URL url2 = getClass().getResource("resources/「お相手しましょう」 (online-audio-converter.com).wav");
+	ClientMain.frame.playSoundEffect(url2);
      // カスタムパネルを作成してフレームに追加
         TextAndImagePanel2 panel = new TextAndImagePanel2(url, TitleView.text);	    
 	    this.add(panel);
@@ -287,7 +306,7 @@ public void pekopeko() {
 	public void PrologueView() {
 		String name = new String(TitleView.name.getText());
 		URL url = getClass().getResource("resources/prologue1.png");
-		URL url1 = getClass().getResource("resources/skip_b.png");
+		URL url1 = getClass().getResource("resources/skip-button.png");
 		String text ="“イキり”…。\nそれは、隠し持つ\nガラスのハートの表れ…。\n\n"
 	            + 
 	            "ウサギのような\n小心者の新卒サラリーマン\n「"+ name+ "」は、\n"
@@ -321,6 +340,8 @@ public void pekopeko() {
 		    skipButton.addActionListener(new ActionListener() {
 		        @Override
 		        public void actionPerformed(ActionEvent e) {
+		        	URL url = getClass().getResource("resources/skip.wav");
+		        	ClientMain.frame.playSoundEffect(url);
 		            PrologueView1();
 		        }
 		    });
@@ -390,6 +411,8 @@ public void PrologueView1() {
 		    skipButton.addActionListener(new ActionListener() {
 		        @Override
 		        public void actionPerformed(ActionEvent e) {
+		        	URL url = getClass().getResource("resources/skip.wav");
+		        	ClientMain.frame.playSoundEffect(url);
 		            changeView(new SimpleRPG());
 		        }
 		    });
@@ -417,14 +440,19 @@ public void PrologueView1() {
 	    }
 	
 public void BadEndingView() {
+	ClientMain.frame.setText("lose");
+	AccountDAO.Insert();
 	getContentPane().removeAll();
 	String name = new String(TitleView.name.getText());
 	URL url = getClass().getResource("resources/failure_epilogue.png");
-	URL url1 = getClass().getResource("resources/skip_b.png");
+	URL url1 = getClass().getResource("resources/RePLAY-button .png");
+	URL url2 = getClass().getResource("resources/GAMEOVER.png");
+	URL url3 = getClass().getResource("resources/GameOver.wav");
+	ClientMain.frame.playSoundEffect(url3);
 	String text1 = 
-	"あの程度でクビかよ・・・転職活動、メンドクセェ～";
+	"\n\n\n\n\n\n      「あ～あ・・・」";
 	ClientMain.frame.setHP(10);
-        TextAndImagePanel panel = new TextAndImagePanel(url,text1);
+        TextAndImagePanel4 panel = new TextAndImagePanel4(url,text1);
         add(panel);
         panel.requestFocusInWindow();
         validate();
@@ -432,15 +460,16 @@ public void BadEndingView() {
         panel.setLayout(null); 
 	    // 重要！レイアウトマネージャを無効化
 	    JButton skipButton = new JButton(new ImageIcon(url1));
-
+	    JLabel gameover = new JLabel(new ImageIcon(url2));
 	    int buttonWidth = 200;
 	    int buttonHeight = 80;
-
+	    
 	    skipButton.setBounds(500,450,buttonWidth,buttonHeight);
 	    skipButton.setOpaque(false);
 	    skipButton.setContentAreaFilled(false);
 	    skipButton.setBorderPainted(false);
-
+	    gameover.setBounds(30,50,400,89);
+	    
 	   
 
 	    skipButton.addActionListener(new ActionListener() {
@@ -452,7 +481,7 @@ public void BadEndingView() {
         // フレームを表示
         this.setVisible(true);
         panel.add(skipButton);
-
+        panel.add(gameover);
         // テキストを1文字ずつ0.1秒ごとに表示するためのタイマーをセットアップ
         Timer timer = new Timer(30, new ActionListener() {
             private int charIndex = 0;
@@ -472,10 +501,12 @@ public void BadEndingView() {
     }
 
 	public void EndingView() {
+    	ClientMain.frame.setText("win");
+		AccountDAO.Insert();
 		getContentPane().removeAll();
 		String name = new String(TitleView.name.getText());
 		URL url = getClass().getResource("resources/success_epilogue.png");
-		URL url1 = getClass().getResource("resources/skip_b.png");
+		URL url1 = getClass().getResource("resources/skip-button.png");
 		String text1 = 
 		"らいおん社長\n" +
 		"「待っていたよ…。『"+name+"』くん…」\n\n"+
@@ -550,7 +581,7 @@ public void BadEndingView() {
 	public void EndingView1() {
 		getContentPane().removeAll();
 		String name = new String(TitleView.name.getText());
-		URL url1 = getClass().getResource("resources/skip_b.png");
+		URL url1 = getClass().getResource("resources/RePLAY-button .png");
 		URL url = getClass().getResource("resources/success_epilogue.png");
 		String text2 =
 		"今後、我が社も大きなプロジェクトを\n担当する予定だ。\n"+
