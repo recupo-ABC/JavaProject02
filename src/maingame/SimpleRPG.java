@@ -12,7 +12,7 @@ import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.awt.image.BufferedImage;
 import java.io.IOException;
-import java.util.Random;
+import java.net.URL;
 
 import javax.imageio.ImageIO;
 import javax.swing.JPanel;
@@ -27,21 +27,23 @@ class SimpleRPG extends JPanel implements ActionListener {
     private Enemy enemyX;
     private Enemy enemyY;
     private boolean inBattle = false;
-    private Random random = new Random();
-    private String battleMessage = "";
+    private String battleMessage = "向かい側の壁のどこかに社長室への扉があります。\nカーソルキーを動かして向かい側の壁へ向かいましょう！";
     private long battleMessageTimestamp = 0;
     private boolean showEnemy = false;
-    private long enemyRespawnTimestamp = 0;
-    private boolean lastEnemyWasX = false;
     private boolean showChoices = false; // NEW: 選択肢を表示するかどうかのフラグ
     private int currentChoice = 0;  
     boolean monster = false;// NEW: 現在の選択肢 (0: 相手に対応する, 1: 逃げる)
     long currentTime = System.currentTimeMillis();
+    URL url = getClass().getResource("resources/feeldBGM.wav");
+    URL url1 = getClass().getResource("resources/RPG_Battle_04.wav"); 
     // 障害物の配列を追加
     private Obstacle[] obstacles;
     private BufferedImage battleModeBackground;
+    private BufferedImage backgroundImage;
+    
     String name = new String(TitleView.name.getText());
     public SimpleRPG() {
+    	ClientMain.frame.playSoundEffect(url);
         this.setFocusable(true);
         
         this.addKeyListener(new KeyAdapter() {
@@ -57,35 +59,38 @@ class SimpleRPG extends JPanel implements ActionListener {
         	                String technique = player.useTechnique();
         	                boolean victory = technique.endsWith("！");
         	                if (!victory) {
-        	                    GameFrame.h += 1;
-        	                    battleMessage = technique + "\n\n" +"勝利！イキリーマンはHPが5追加された！";
+        	                	ClientMain.frame.setHP(ClientMain.frame.getHP() + 5);
+        	                    battleMessage = technique;
         	                } else {
-        	                    GameFrame.h -= 1;
-        	                    battleMessage = technique + "\n\n" + "敗北... イキリーマンはHPを5失った...";
+        	                	ClientMain.frame.setHP(ClientMain.frame.getHP() - 5);
+        	                    battleMessage = technique;
         	                }
         	                battleMessageTimestamp = currentTime;
         	                showChoices = false;
         	                Timer timer = new Timer(2000, new ActionListener() {
         	                	@Override
-        	                	public void actionPerformed(ActionEvent paramActionEvent) {
-        	                	// ここに1秒後に実行する処理
-        	                		ClientMain.frame.changeView(new SimpleRPG());
+        	                	public void actionPerformed(ActionEvent paramActionEvent) {        	                
+        	                	if(!victory) {        	                		
+        	                			ClientMain.frame.pekopeko();        	                		
+        	                	}else{
+        	                	ClientMain.frame.kikoenai();
         	                	}
+        	                	}       	                
         	                	});
         	                	timer.setRepeats(false); // 1回だけ実行する場合
         	                	timer.start();
         	                
         	            } else {
-        	            	battleMessage = name + "は逃げ出した";
-        	            	GameFrame.n++;
+        	            	battleMessage = "\n";
         	                battleMessageTimestamp = currentTime;
         	                showChoices = false;
         	                Timer timer = new Timer(2000, new ActionListener() {
         	                	@Override
         	                	public void actionPerformed(ActionEvent paramActionEvent) {
-        	                	// ここに1秒後に実行する処理
-        	                		ClientMain.frame.changeView(new SimpleRPG());
-        	                	}
+        	                    	// ここに1秒後に実行する処理
+        	                		ClientMain.frame.setHP(ClientMain.frame.getHP()-3);
+        	                		ClientMain.frame.run();       	                    	
+        	                    	}
         	                	});
         	                	timer.setRepeats(false); // 1回だけ実行する場合
         	                	timer.start();
@@ -100,35 +105,43 @@ class SimpleRPG extends JPanel implements ActionListener {
         	                String technique = player.useTechnique1();
         	                boolean victory = technique.endsWith("！");
         	                if (!victory) {
-        	                    GameFrame.h += 1;
-        	                    battleMessage = technique + "\n\n" +"勝利！イキリーマンはHPが5追加された！";
+        	                	ClientMain.frame.setHP(ClientMain.frame.getHP() + 5);
+        	                    battleMessage = technique;
         	                } else {
-        	                    GameFrame.h -= 1;
-        	                    battleMessage = technique + "\n\n" + "敗北... イキリーマンはHPを5失った...";
+        	                	ClientMain.frame.setHP(ClientMain.frame.getHP() - 5);
+        	                    battleMessage = technique;
         	                }
         	                battleMessageTimestamp = currentTime;
         	                showChoices = false;
         	                Timer timer = new Timer(2000, new ActionListener() {
         	                	@Override
-        	                	public void actionPerformed(ActionEvent paramActionEvent) {
-        	                	// ここに1秒後に実行する処理
-        	                		ClientMain.frame.changeView(new SimpleRPG());
-        	                	}
-        	                	});
-        	                	timer.setRepeats(false); // 1回だけ実行する場合
-        	                	timer.start();
+        	                	public void actionPerformed(ActionEvent paramActionEvent) {        	                
+            	                	if(!victory) {
+            	                		ClientMain.frame.pekopeko();
+            	                	}else{    
+            	                		if(technique.equals("イキり中指！")) {
+            	                		ClientMain.frame.nakayubi();
+            	                		}else {
+            	                		ClientMain.frame.tackle();
+            	                		}
+            	                	}
+            	                		
+            	                	}       	                
+            	                	});
+            	                	timer.setRepeats(false); // 1回だけ実行する場合
+            	                	timer.start();
         	                
         	            } else {
-        	            	battleMessage = name + "は逃げ出した";
-        	            	GameFrame.n++;
+        	            	battleMessage = "\n";
         	            	battleMessageTimestamp = currentTime;
         	                showChoices = false;
         	                Timer timer = new Timer(2000, new ActionListener() {
         	                	@Override
         	                	public void actionPerformed(ActionEvent paramActionEvent) {
-        	                	// ここに1秒後に実行する処理
-        	                		ClientMain.frame.changeView(new SimpleRPG());
-        	                	}
+        	                    	// ここに1秒後に実行する処理
+        	                		ClientMain.frame.setHP(ClientMain.frame.getHP()-3);
+        	                		ClientMain.frame.run();       	                    	
+        	                    	}
         	                	});
         	                	timer.setRepeats(false); // 1回だけ実行する場合
         	                	timer.start();
@@ -146,19 +159,22 @@ class SimpleRPG extends JPanel implements ActionListener {
             @Override
             public void mouseClicked(MouseEvent e) {
                 if (showChoices) {
-                    int mouseX = e.getX();
+                  
                     int mouseY = e.getY();
-                    int choiceWidth = getWidth() / 2;
-                    int choiceHeight = (int) (getHeight() * 0.2) / 2;
-                    int startY = (int) (getHeight() * 0.8);
-                    if (mouseY > startY && mouseY < startY + choiceHeight) {
-                        if (mouseX > getWidth() / 2 && mouseX < getWidth() / 2 + choiceWidth) {
-                            currentChoice = 0;
-                        } else if (mouseX > getWidth() / 2 + choiceWidth && mouseX < getWidth()) {
-                            currentChoice = 1;
-                        }
-                        SimpleRPG.this.keyPressed(new KeyEvent(SimpleRPG.this, KeyEvent.KEY_PRESSED, System.currentTimeMillis(), 0, KeyEvent.VK_ENTER, KeyEvent.CHAR_UNDEFINED));
+                    int height = getHeight();
+                    int choiceAreaHeight = (int) (height * 0.2); // 全体の下側20%
+                    int choiceAreaStartY = height - choiceAreaHeight; // 選択領域の開始Y座標
+                    int halfChoiceAreaHeight = choiceAreaHeight / 2; // 選択領域の半分の高さ
 
+                    // 「対応する」の選択肢の領域をクリックした場合 (選択領域の上半分)
+                    if (mouseY >= choiceAreaStartY && mouseY < choiceAreaStartY + halfChoiceAreaHeight) {
+                        currentChoice = 0;
+                        executeAction();
+                    }
+                    // 「逃げる」の選択肢の領域をクリックした場合 (選択領域の下半分)
+                    else if (mouseY >= choiceAreaStartY + halfChoiceAreaHeight && mouseY < choiceAreaStartY + choiceAreaHeight) {
+                        currentChoice = 1;
+                        executeAction();
                     }
                 }
             }
@@ -167,22 +183,23 @@ class SimpleRPG extends JPanel implements ActionListener {
     
          // 画像の読み込み
         try {
-            battleModeBackground = ImageIO.read(getClass().getResource("resources/battle_background.jpg"));
+            battleModeBackground = ImageIO.read(getClass().getResource("resources/battle_background.png"));
+            backgroundImage = ImageIO.read(getClass().getResource("resources/office_field.png"));
         } catch (IOException e) {
             e.printStackTrace();
         }
         
         // 障害物を初期化
         obstacles = new Obstacle[]{
-            new Obstacle(150, 60, 40, 90),
-            new Obstacle(300, 60, 40, 90),
-            new Obstacle(450, 60, 40, 90),
-            new Obstacle(600, 60, 40, 90),
+            new Obstacle(150, 90, 40, 60),
+            new Obstacle(300, 90, 40, 60),
+            new Obstacle(450, 90, 40, 60),
+            new Obstacle(600, 90, 40, 60),
             
-            new Obstacle(150, 250, 40, 90),
-            new Obstacle(300, 250, 40, 90),
-            new Obstacle(450, 250, 40, 90),
-            new Obstacle(600, 250, 40, 90)
+            new Obstacle(150, 250, 40, 60),
+            new Obstacle(300, 250, 40, 60),
+            new Obstacle(450, 250, 40, 60),
+            new Obstacle(600, 250, 40, 60)
         };
         
         initGame();
@@ -190,20 +207,114 @@ class SimpleRPG extends JPanel implements ActionListener {
        
     }
 
+    private void executeAction() {
+        if (inBattle && showChoices && monster) {
+            if (currentChoice == 0) {
+                // 「対応する」が選択された時の処理
+                String name = new String(TitleView.name.getText());
+                String technique = player.useTechnique();
+                boolean victory = technique.endsWith("！");
+                if (!victory) {
+                	ClientMain.frame.setHP(ClientMain.frame.getHP() + 5);
+                    battleMessage = technique;
+                } else {
+                	ClientMain.frame.setHP(ClientMain.frame.getHP() - 5);
+                    battleMessage = technique;
+                }
+                battleMessageTimestamp = currentTime;
+                showChoices = false;
+                Timer timer = new Timer(2000, new ActionListener() {
+                	@Override
+                	public void actionPerformed(ActionEvent paramActionEvent) {        	                
+	                	if(!victory) {
+	                		ClientMain.frame.pekopeko();	                		
+	                	}else{
+	                		ClientMain.frame.kikoenai();
+	                	}
+	                	}       	                
+	                	});
+	                	timer.setRepeats(false); // 1回だけ実行する場合
+	                	timer.start();
+                
+            } else {
+            	battleMessage = "\n";           	
+                battleMessageTimestamp = currentTime;
+                showChoices = false;
+                Timer timer = new Timer(2000, new ActionListener() {
+                	@Override
+                	public void actionPerformed(ActionEvent paramActionEvent) {
+                    	// ここに1秒後に実行する処理
+                		ClientMain.frame.setHP(ClientMain.frame.getHP()-3);
+                    		ClientMain.frame.run();
+                	}
+                	});
+                	timer.setRepeats(false); // 1回だけ実行する場合
+                	timer.start();
+            }  
+    }if (inBattle && showChoices && !monster) {
+    	if (currentChoice == 0) {
+            // 「対応する」が選択された時の処理
+            String name = new String(TitleView.name.getText());
+            String technique = player.useTechnique1();
+            boolean victory = technique.endsWith("！");
+            if (!victory) {
+            	ClientMain.frame.setHP(ClientMain.frame.getHP() + 5);
+                battleMessage = technique;
+            } else {
+            	ClientMain.frame.setHP(ClientMain.frame.getHP() - 5);
+                battleMessage = technique;
+            }
+            battleMessageTimestamp = currentTime;
+            showChoices = false;
+            Timer timer = new Timer(2000, new ActionListener() {
+            	@Override
+            	public void actionPerformed(ActionEvent paramActionEvent) {        	                
+                	if(!victory) {
+                			ClientMain.frame.pekopeko();              		
+                	}else{
+                		if(technique.equals("イキり中指！")) {
+	                		ClientMain.frame.nakayubi();
+	                		}else {
+	                		ClientMain.frame.tackle();
+	                		}
+                	}
+                	}       	                
+                	});
+                	timer.setRepeats(false); // 1回だけ実行する場合
+                	timer.start();
+            
+        } else {
+        	battleMessage = "\n";
+        	battleMessageTimestamp = currentTime;
+            showChoices = false;
+            Timer timer = new Timer(2000, new ActionListener() {
+            	@Override
+            	public void actionPerformed(ActionEvent paramActionEvent) {
+            	// ここに1秒後に実行する処理
+            		ClientMain.frame.setHP(ClientMain.frame.getHP()-3);
+            		ClientMain.frame.run();
+            	}            	
+            	});
+            	timer.setRepeats(false); // 1回だけ実行する場合
+            	timer.start();
+        }
+    }
+    }
     protected void keyPressed(KeyEvent keyEvent) {
 		// TODO 自動生成されたメソッド・スタブ
 		
 	}
 
     
+    
 	private void initGame() {
+		
         if (player != null) {
-            player.resetHP();
         } else {
-            player = new Player(375, 370, 10, obstacles); // obstacles を引数として追加
+            player = new Player(375, 370, obstacles);// obstacles を引数として追加
         }
-        enemyX = new Enemy(0, 0, Color.RED, "モンスタークレーマーに遭遇！", obstacles, 0); // x座標とy座標を0に設定
-        enemyY = new Enemy(770, 0, Color.BLUE, "パワハラ上司に遭遇！", obstacles, 1); // x座標を770に、y座標を0に設定
+        enemyX = new Enemy(-60, 0, Color.RED, "モンスタークレーマーに遭遇！", obstacles); // x座標とy座標を0に設定
+        enemyY = new Enemy(770, 0, Color.BLUE, "パワハラ上司に遭遇！", obstacles); // x座標を770に、y座標を0に設定
         if(GameFrame.Z % 2 == 0) {
         	currentEnemy = enemyX;
         }else if(GameFrame.Z % 2 == 1) {
@@ -250,7 +361,7 @@ class SimpleRPG extends JPanel implements ActionListener {
                         battleMessageTimestamp = currentTime;
                     } else {
                         showChoices = true; // 選択肢を表示
-                        monster = battleMessage.endsWith("よ！」");
+                        monster = battleMessage.endsWith("ら！」");
                         battleMessage = "";
                     }
                 } else if (battleMessage.equals(currentEnemy.getEncounterMessage())) {
@@ -262,7 +373,14 @@ class SimpleRPG extends JPanel implements ActionListener {
             }
 
         } else {
-            currentEnemy.move(player);  // 敵がプレイヤーに近づくように移動
+        	Timer timer = new Timer(3000, new ActionListener() {
+            	@Override
+            	public void actionPerformed(ActionEvent paramActionEvent) {        	                
+                	currentEnemy.move(player);  // 敵がプレイヤーに近づくように移動
+                	}       	                
+                	});
+                	timer.setRepeats(false); // 1回だけ実行する場合
+                	timer.start();
             checkCollisions();  // 衝突判定
 
             if (inBattle) {
@@ -282,6 +400,8 @@ private void checkCollisions() {
         Rectangle enemyBounds = new Rectangle(currentEnemy.x, currentEnemy.y, currentEnemy.SIZE, currentEnemy.SIZE);
         if (playerBounds.intersects(enemyBounds)) {
             inBattle = true;
+            ClientMain.frame.stopMusic();
+            ClientMain.frame.playSoundEffect(url1);
         }
 
         // 障害物との衝突判定を追加
@@ -305,8 +425,10 @@ private void checkCollisions() {
 
     @Override
     protected void paintComponent(Graphics g) {
+
         super.paintComponent(g);
 
+        g.drawImage(backgroundImage, 0, 0, this.getWidth(), getHeight() - getHeight()/5, null);
         if (inBattle) {
             int gameAreaHeight = (int) (this.getHeight() * 0.8);
             g.drawImage(battleModeBackground, 0, 0, this.getWidth(), gameAreaHeight, null);
@@ -318,7 +440,7 @@ private void checkCollisions() {
                 obstacle.draw(g);
             }
         }
-
+        
         player.draw(g);
         if (showEnemy) {
             currentEnemy.draw(g);
@@ -380,7 +502,7 @@ private void checkCollisions() {
         g.drawString(name +"HP初期値: 10", x + 10, y + 20);
         g.drawString("HPが20になるとゲームクリア", x + 10, y + 40);
         g.drawString("HPが0になるとゲーム終了", x + 10, y + 60);
-        g.drawString("現在のHP: " + player.hp, x + 10, y + 80);
+        g.drawString("現在のHP: " + ClientMain.frame.getHP(), x + 10, y + 80);
     }
 
     private void drawBattleMessage(Graphics g, int x, int y, int width, int height) {

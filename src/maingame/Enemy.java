@@ -26,10 +26,9 @@ public class Enemy {
 	static int z;
     
 
-    public Enemy(int x, int y, Color color, String encounterMessage, Obstacle[] obstacles, int z) {
+    public Enemy(int x, int y, Color color, String encounterMessage, Obstacle[] obstacles) {
         this.x = x;
         this.y = y;
-        this.z = z;
         this.color = color;
         this.encounterMessage = encounterMessage;
         this.obstacles = obstacles;
@@ -48,15 +47,15 @@ public class Enemy {
     
         if (color == Color.RED) {
             secondaryMessages = new String[]{
-                "モンスタークレーマー：\n「あなたの会社いったいどうなってるの？」",
-                "「私はあなたの会社のためを思って\n言ってるのよ！」",
-                "「今すぐひざまずいて\n私のけつをなめなさいよ！」"
+                "モンスタークレーマー：\n「あのねえお客様は神様だから！」",
+                "「つまり私は神様だから！」",
+                "「だから出来ないとかありえないから！」"
             };
         } else if (color == Color.BLUE) {
             secondaryMessages = new String[]{
-                "パワハラ上司：\n「おいコラお前は何様のつもりだ！」",
-                "「俺がお前に怒鳴るのも殴るのも\n全てお前を思って言ってるんだぞ！」",
-                "「今すぐひざまずいて俺様のけつをなめろ！」"
+                "パワハラ上司：\n「お前同じこと何度言わせんの？」",
+                "「お前さあ小学校卒業してる？」",
+                "「お前ほんとラ・フランスだな（笑）」"
             };
         }
     }
@@ -77,7 +76,6 @@ public String getEncounterMessage() {
 public void move(Player player) {
     prevX = x;
     prevY = y;
-
     if (x < player.x) x += SPEED;
     else if (x > player.x) x -= SPEED;
 
@@ -96,7 +94,6 @@ public void move(Player player) {
 private void findClearPath(Obstacle obstacle) {
     int[] dx = {-SPEED, 0, SPEED, 0};
     int[] dy = {0, -SPEED, 0, SPEED};
-
     for (int i = 0; i < 4; i++) {
         int newX = x + dx[i];
         int newY = y + dy[i];

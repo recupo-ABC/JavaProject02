@@ -9,6 +9,7 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
+import java.net.URL;
 
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
@@ -26,15 +27,14 @@ public class TitleView extends JPanel implements ActionListener{
 	JLabel label1;
 	static String text;
 	static JButton startButton;
+	Player player;
     public TitleView() {
-    	
-    	backgroundImage = Toolkit.getDefaultToolkit().createImage("src/maingame/resources/画像３.jpg");
-    	startButton = new JButton("");
-    	ImageIcon buttonIcon = new ImageIcon("src/maingame/resources/133.114.249.105 (1).gif");
+    	URL bgi = getClass().getResource("resources/titleview.png");
+    	backgroundImage = Toolkit.getDefaultToolkit().createImage(bgi);
+    	ImageIcon icon = new ImageIcon(getClass().getResource("resources/133.114.249.105 (1).gif"));
+    	startButton = new JButton();
     	JLabel title = new JLabel("イキリーマン伝説");
         JLabel title1= new JLabel("～シン・社会人へのキャリアップ～");
-//        JLabel title2= new JLabel("プレイヤーネームを入力して下さい");
-
         label = new JLabel("");
         label1 = new JLabel("");
         name = new JTextField("", 20);
@@ -44,9 +44,7 @@ public class TitleView extends JPanel implements ActionListener{
         setFocusable(true);
         setVisible(true);
         setBounds(0,0,800,600);
-        
-        
-        startButton.setIcon(buttonIcon);
+        startButton.setIcon(icon);
         startButton.setBounds(445, 467, 63, 36);
         startButton.setContentAreaFilled(false);
         startButton.setBorderPainted(false);
@@ -58,22 +56,16 @@ public class TitleView extends JPanel implements ActionListener{
         title1.setBounds(200,300,500,100);
         title1.setForeground(Color.BLACK);
         title.setBounds(260,250,400,100);
-//        title2.setBounds(250,500,300,30);
-//        title2.setForeground(Color.LIGHT_GRAY);
         title.setFont(new Font("SansSerif", Font.BOLD, 32));
         title1.setFont(new Font("SansSerif", Font.BOLD, 24));
-//      title2.setFont(new Font("SansSerif", Font.BOLD, 18));
-//        add(title);
-//        add(title1);
-//       add(title2);
-
-
         ClientMain.frame.getRootPane().setDefaultButton(startButton);
         myKeyListener = new MyKeyListener(this);
     }
 	public void actionPerformed(ActionEvent e) {
         if (e.getActionCommand().equals("start")) { 
-        	label.setText(name.getText());
+        	URL url = getClass().getResource("resources/start.wav");
+        	ClientMain.frame.playSoundEffect(url);
+        	label.setText(name.getText());      	
         	remove(startButton);
         	remove(name);
         	ClientMain.frame.PrologueView();

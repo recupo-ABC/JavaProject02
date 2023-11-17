@@ -14,18 +14,16 @@ import javax.imageio.ImageIO;
 public class Player {
     public int x;
 	public int y;
-	public static int hp;
     public final int SIZE = 75;  // サイズを20x20に変更
     final int SPEED = 5;
     private int prevX, prevY;
     private Obstacle[] obstacles; 
     private BufferedImage playerImage;  // 画像を読み込むための変数を追加
-
-    public Player(int x, int y, int hp, Obstacle[] obstacles) { 
+    public Player(int x, int y, Obstacle[] obstacles) { 
         this.x = x;
         this.y = y;
-        this.hp = hp;
-        this.obstacles = obstacles; 
+        this.obstacles = obstacles;
+
 
         // 画像の読み込み
         try {
@@ -69,7 +67,7 @@ public void move() { // シグネチャを変更
 public String useTechnique() {
     Random random = new Random();
     if (random.nextBoolean()) {
-        return "イキり舌打ち！";
+        return "イキり耳塞ぎ！";
     } else {
         return "おとなぺこぺこ（笑）";
     }
@@ -77,13 +75,13 @@ public String useTechnique() {
 
 public String useTechnique1() {
     Random random = new Random();
-    int randomValue = random.nextInt(2);
+    int randomValue = random.nextInt(3);
     if (randomValue == 0) {
-        return "往復ビンタ！";
+        return "イキりタックル！";
     } else if(randomValue == 1) {
         return "おとなぺこぺこ（笑）";
     }else if(randomValue == 2) {
-    	return "のしかかり！";
+    	return "イキり中指！";
     }
 	return null;
 }
@@ -100,10 +98,6 @@ public void undoMove() {
 public boolean intersects(Obstacle obstacle) {
     Rectangle playerBounds = new Rectangle(x, y, SIZE, SIZE);
     return playerBounds.intersects(obstacle.getBounds());
-}
-
-public void resetHP() {
-    this.hp = 10; // 初期HP値に設定
 }
 
 }
