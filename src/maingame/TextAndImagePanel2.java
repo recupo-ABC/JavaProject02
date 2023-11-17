@@ -3,7 +3,6 @@ package maingame;
 import java.awt.Color;
 import java.awt.Font;
 import java.awt.Graphics;
-import java.awt.Graphics2D;
 import java.awt.Image;
 import java.awt.Toolkit;
 import java.net.URL;
@@ -38,9 +37,6 @@ public class TextAndImagePanel2 extends JPanel {
         g.fillRect(0, 400, getWidth(),5);
         g.fillRect(0, 555, getWidth(),5);
               
-        Graphics2D g2 = (Graphics2D) g;
-        int w = getWidth();
-        float baseline = getHeight() / 2f;
         int lineHeight = 40;
         int x = 100;
         int y =  450;

@@ -1,1 +1,0 @@
-packageSearchIndex = [{"l":"maingame"},{"l":"すべてのパッケージ","u":"allpackages-index.html"}];updateSearchResults();

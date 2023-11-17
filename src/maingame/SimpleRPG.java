@@ -55,7 +55,6 @@ class SimpleRPG extends JPanel implements ActionListener {
         	            currentChoice = 1 - currentChoice; // 選択肢を切り替える
         	        } else if (e.getKeyCode() == KeyEvent.VK_ENTER) {
         	            if (currentChoice == 0) {
-        	            	String name = new String(TitleView.name.getText());
         	                String technique = player.useTechnique();
         	                boolean victory = technique.endsWith("！");
         	                if (!victory) {
@@ -101,7 +100,6 @@ class SimpleRPG extends JPanel implements ActionListener {
         	            currentChoice = 1 - currentChoice; // 選択肢を切り替える
         	        } else if (e.getKeyCode() == KeyEvent.VK_ENTER) {
         	            if (currentChoice == 0) {
-        	            	String name = new String(TitleView.name.getText());
         	                String technique = player.useTechnique1();
         	                boolean victory = technique.endsWith("！");
         	                if (!victory) {
@@ -211,7 +209,6 @@ class SimpleRPG extends JPanel implements ActionListener {
         if (inBattle && showChoices && monster) {
             if (currentChoice == 0) {
                 // 「対応する」が選択された時の処理
-                String name = new String(TitleView.name.getText());
                 String technique = player.useTechnique();
                 boolean victory = technique.endsWith("！");
                 if (!victory) {
@@ -254,7 +251,6 @@ class SimpleRPG extends JPanel implements ActionListener {
     }if (inBattle && showChoices && !monster) {
     	if (currentChoice == 0) {
             // 「対応する」が選択された時の処理
-            String name = new String(TitleView.name.getText());
             String technique = player.useTechnique1();
             boolean victory = technique.endsWith("！");
             if (!victory) {
@@ -317,8 +313,26 @@ class SimpleRPG extends JPanel implements ActionListener {
         enemyY = new Enemy(770, 0, Color.BLUE, "パワハラ上司に遭遇！", obstacles); // x座標を770に、y座標を0に設定
         if(GameFrame.Z % 2 == 0) {
         	currentEnemy = enemyX;
+        	Timer timer = new Timer(3000, new ActionListener() {
+            	@Override
+            	public void actionPerformed(ActionEvent paramActionEvent) {
+                	// ここに1秒後に実行する処理
+            		battleMessage = "モンスタークレーマーが現れた！！";      	                    	
+                	}
+            	});
+            	timer.setRepeats(false); // 1回だけ実行する場合
+            	timer.start();
         }else if(GameFrame.Z % 2 == 1) {
         	currentEnemy = enemyY;
+        	Timer timer = new Timer(3000, new ActionListener() {
+            	@Override
+            	public void actionPerformed(ActionEvent paramActionEvent) {
+                	// ここに1秒後に実行する処理
+            		battleMessage = "パワハラ上司が現れた！！";      	                    	
+                	}
+            	});
+            	timer.setRepeats(false); // 1回だけ実行する場合
+            	timer.start();
         }
          
 //        lastEnemyWasX = (currentEnemy == enemyX);
@@ -466,8 +480,6 @@ private void checkCollisions() {
 
         g.setFont(new Font("MS UI Gothic", Font.BOLD, 16));
         int lineHeight = g.getFontMetrics().getHeight();
-        int choiceWidth = width / 2;
-        int choiceHeight = height / 2;
 
         // "SELECT!"の描画
         g.drawString("SELECT!", x + width / 2 - g.getFontMetrics().stringWidth("SELECT!") / 2, y + lineHeight);

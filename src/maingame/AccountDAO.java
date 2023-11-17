@@ -19,7 +19,6 @@ public class AccountDAO {
 	           
 	            preStatement.setString(1, name);
 	            preStatement.setString(2,result );
-	            int count = preStatement.executeUpdate();
 	        }catch (SQLException e) {
 	            e.printStackTrace();
 	        }finally {
