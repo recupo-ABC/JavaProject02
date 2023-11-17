@@ -199,7 +199,7 @@ public void pekopeko() {
 		getContentPane().removeAll();
 		URL url = getClass().getResource("resources/kikoena~i2.png");
 		String text =name + "は話にならないので耳を塞いだ。\n後で怒られてしまいHPが5減った。\n\n\n\n\n\n\n";
-		URL url2 = getClass().getResource("resources/「これは強敵だな…！」 (online-audio-converter.com).wav");
+		URL url2 = getClass().getResource("resources/「これは強敵だな…！」.wav");
 		ClientMain.frame.playSoundEffect(url2);
 	     // カスタムパネルを作成してフレームに追加
 	        TextAndImagePanel2 panel = new TextAndImagePanel2(url, TitleView.text);	    
