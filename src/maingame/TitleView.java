@@ -69,6 +69,8 @@ public class TitleView extends JPanel implements ActionListener{
         	remove(startButton);
         	remove(name);
         	ClientMain.frame.PrologueView();
+//        	ClientMain.frame.clear();
+        	ClientMain.frame.setHP(10);
 //        	ClientMain.frame.EndingView();
         	return;
         } 

@@ -120,7 +120,7 @@ public void clear() {
 	getContentPane().removeAll();
 	URL url = getClass().getResource("resources/images/tobira.gif");
 	String text ="ミッションクリア！！\nついに、社長室への扉が開いた・・・\n\n\n\n\n\n";
-	URL url2 = getClass().getResource("resources/music/LvUp.wav");
+	URL url2 = getClass().getResource("resources/music/教会の祈り.wav");
 	ClientMain.frame.playSoundEffect(url2);
      // カスタムパネルを作成してフレームに追加
         TextAndImagePanel3 panel = new TextAndImagePanel3(url, TitleView.text);	    
@@ -139,15 +139,9 @@ public void clear() {
                 	panel.appendChar(text.charAt(charIndex++));
                 } else {
                     ((Timer) e.getSource()).stop();
-                    // プロローグ終了後、Ending画面に遷移
-                    if(ClientMain.frame.getHP() >= 20) {
-                    	clear();
-                    }else {
-//                    	changeView(new SimpleRPG());
                     	EndingView();
                     }
-                }
-            }
+                }            
         });
         timer.start();
     }
@@ -183,8 +177,7 @@ public void run() {
 	                    if(ClientMain.frame.getHP() <= 0) {
 	                    	BadEndingView();
 	                    }else {
-//	                    	changeView(new SimpleRPG());
-	                    	clear();
+	                    	changeView(new SimpleRPG());
 	                    }
 	                }
 	            }
@@ -350,7 +343,7 @@ public void pekopeko() {
 	            "ウサギのような\n小心者の新卒サラリーマン\n「"+ name+ "」は、\n"
 	            + 
 	            "今日もイキりまくったファッションで\n"
-	            + "IT企業「ZOO」に二日酔い＆大遅刻で現れた。\n\n"
+	            + "IT企業「ビッグジャーニー」に二日酔い＆大遅刻で現れた。\n\n"
 	            +
 	            "そんな「" + name + " 」に突然、社長室へ来るようにとの指示が…。\n\n"
 	            + 
@@ -488,7 +481,6 @@ public void BadEndingView() {
 	ClientMain.frame.playSoundEffect(url3);
 	String text1 = 
 	"\n\n\n\n\n\n      「あ～あ・・・」";
-	ClientMain.frame.setHP(10);
         TextAndImagePanel4 panel = new TextAndImagePanel4(url,text1);
         add(panel);
         panel.requestFocusInWindow();
@@ -550,7 +542,7 @@ public void BadEndingView() {
 		"社長\n" +
 		"「待っていたよ…。『"+name+"』くん…」\n\n"+
 		name + "\n"+	
-		"社長ッッ…！」\n\n"+
+		"「社長ッッ…！」\n\n"+
 		"社長\n"+
 		"「『男子たるもの、\n三日会わざれば刮目して見よ』と言うが…。\n"+
 		"今日一日で、ずいぶん成長したようだね…」\n\n"+
@@ -619,11 +611,11 @@ public void BadEndingView() {
 		"社長\n"+
 		"「そして、もうひとつ…。\n"+
 		"この会社を、明日から君に任せたい。\n"+
-		"老兵は去るのみ、\n未来を若者に託したいのだ。\n"+
-		"なってくれるね？\n株式会社『ZOO』の新しい社長に…」\n\n"+
+		"未来を若者に託したいのだ。\n"+
+		"なってくれるね？\n株式会社『ビッグジャーニー』の新しい社長に…」\n\n"+
 
 		"静かに頷き、頬を涙で濡らす「"+name+"」。\n"+
-		"そのうさぎの赤い瞳は、\n『ZOO』の行く末を明るく照らしていた…。\n\n\n\n\n\n\n\n\n\n\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n";
+		"その赤い瞳は、\n『ビッグジャーニー』の行く末を\n明るく照らしていた…。\n\n\n\n\n\n\n\n\n\n\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n";
 
 	        TextAndImagePanel panel = new TextAndImagePanel(url,text2);
 	        add(panel);

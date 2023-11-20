@@ -22,7 +22,7 @@ public class AccountDAO {
 	        }catch (SQLException e) {
 	            e.printStackTrace();
 	        }finally {
-	            System.out.println("名前と時間を追加しました。");
+
 	        }
 	    }
 	}
