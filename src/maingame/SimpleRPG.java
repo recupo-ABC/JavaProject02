@@ -34,8 +34,8 @@ class SimpleRPG extends JPanel implements ActionListener {
     private int currentChoice = 0;  
     boolean monster = false;// NEW: 現在の選択肢 (0: 相手に対応する, 1: 逃げる)
     long currentTime = System.currentTimeMillis();
-    URL url = getClass().getResource("resources/feeldBGM.wav");
-    URL url1 = getClass().getResource("resources/RPG_Battle_04.wav"); 
+    URL url = getClass().getResource("resources/music/feeldBGM.wav");
+    URL url1 = getClass().getResource("resources/music/RPG_Battle_04.wav"); 
     // 障害物の配列を追加
     private Obstacle[] obstacles;
     private BufferedImage battleModeBackground;
@@ -181,8 +181,8 @@ class SimpleRPG extends JPanel implements ActionListener {
     
          // 画像の読み込み
         try {
-            battleModeBackground = ImageIO.read(getClass().getResource("resources/battle_background.png"));
-            backgroundImage = ImageIO.read(getClass().getResource("resources/office_field.png"));
+            battleModeBackground = ImageIO.read(getClass().getResource("resources/images/battle_background.png"));
+            backgroundImage = ImageIO.read(getClass().getResource("resources/images/office_field.png"));
         } catch (IOException e) {
             e.printStackTrace();
         }

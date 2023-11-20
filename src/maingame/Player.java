@@ -27,7 +27,7 @@ public class Player {
 
         // 画像の読み込み
         try {
-            playerImage = ImageIO.read(getClass().getResource("resources/主人公.png"));
+            playerImage = ImageIO.read(getClass().getResource("resources/images/主人公.png"));
         } catch (IOException e) {
             e.printStackTrace();
         }

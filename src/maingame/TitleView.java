@@ -29,9 +29,9 @@ public class TitleView extends JPanel implements ActionListener{
 	static JButton startButton;
 	Player player;
     public TitleView() {
-    	URL bgi = getClass().getResource("resources/titleview.png");
+    	URL bgi = getClass().getResource("resources/images/titleview.png");
     	backgroundImage = Toolkit.getDefaultToolkit().createImage(bgi);
-    	ImageIcon icon = new ImageIcon(getClass().getResource("resources/133.114.249.105 (1).gif"));
+    	ImageIcon icon = new ImageIcon(getClass().getResource("resources/images/133.114.249.105 (1).gif"));
     	startButton = new JButton();
     	JLabel title = new JLabel("イキリーマン伝説");
         JLabel title1= new JLabel("～シン・社会人へのキャリアップ～");
@@ -63,7 +63,7 @@ public class TitleView extends JPanel implements ActionListener{
     }
 	public void actionPerformed(ActionEvent e) {
         if (e.getActionCommand().equals("start")) { 
-        	URL url = getClass().getResource("resources/start.wav");
+        	URL url = getClass().getResource("resources/music/start.wav");
         	ClientMain.frame.playSoundEffect(url);
         	label.setText(name.getText());      	
         	remove(startButton);

@@ -36,9 +36,9 @@ public class Enemy {
         // 画像の読み込み
         try {
             if (color == Color.RED) {
-                enemyImage = ImageIO.read(getClass().getResource("resources/クレーマー.png"));
+                enemyImage = ImageIO.read(getClass().getResource("resources/images/クレーマー.png"));
             } else if (color == Color.BLUE) {
-                enemyImage = ImageIO.read(getClass().getResource("resources/パワハラ上司.png"));
+                enemyImage = ImageIO.read(getClass().getResource("resources/images/パワハラ上司.png"));
             }
         } catch (IOException e) {
             e.printStackTrace();
