@@ -27,8 +27,8 @@ public class TextAndImagePanel extends JPanel {
         g.drawImage(image, 0, 0, getWidth(), getHeight(), this);
 
         g.setColor(Color.WHITE); // ----------------------------- 文字色
-        g.setFont(new Font("MONOSPACED", Font.BOLD, 18)); // -----------フォント・文字太さ・文字サイズ
-        int lineHeight = 28; // ------------------------行間
+        g.setFont(new Font("MONOSPACED", Font.BOLD, 17)); // -----------フォント・文字太さ・文字サイズ
+        int lineHeight = 24; // ------------------------行間
 //        int x = margin;
         int x = getWidth() / 15;
         int y = getHeight() / 10;

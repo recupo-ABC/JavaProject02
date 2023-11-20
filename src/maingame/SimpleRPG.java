@@ -341,7 +341,6 @@ class SimpleRPG extends JPanel implements ActionListener {
         showEnemy = true;
     }
 
-	
 
     @Override
     public void actionPerformed(ActionEvent e) {

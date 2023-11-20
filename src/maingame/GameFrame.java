@@ -114,8 +114,45 @@ public class GameFrame extends JFrame {
             clip.close();
             clip = null;
         }
+	}
+public void clear() {
+	ClientMain.frame.stopMusic();
+	getContentPane().removeAll();
+	URL url = getClass().getResource("resources/images/tobira.gif");
+	String text ="ミッションクリア！！\nついに、社長室への扉が開いた・・・\n\n\n\n\n\n";
+	URL url2 = getClass().getResource("resources/music/LvUp.wav");
+	ClientMain.frame.playSoundEffect(url2);
+     // カスタムパネルを作成してフレームに追加
+        TextAndImagePanel3 panel = new TextAndImagePanel3(url, TitleView.text);	    
+	    this.add(panel);
+	    
+	    // フレームを表示
+	    this.setVisible(true);
+
+        // テキストを1文字ずつ0.1秒ごとに表示するためのタイマーをセットアップ
+        Timer timer = new Timer(180, new ActionListener() {
+            private int charIndex = 0;
+
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                if (charIndex < text.length()) {
+                	panel.appendChar(text.charAt(charIndex++));
+                } else {
+                    ((Timer) e.getSource()).stop();
+                    // プロローグ終了後、Ending画面に遷移
+                    if(ClientMain.frame.getHP() >= 20) {
+                    	clear();
+                    }else {
+//                    	changeView(new SimpleRPG());
+                    	EndingView();
+                    }
+                }
+            }
+        });
+        timer.start();
     }
-	
+    	 
+        
 public void run() {
 		ClientMain.frame.stopMusic();
 		String name = TitleView.name.getText();
@@ -123,7 +160,7 @@ public void run() {
 		URL url = getClass().getResource("resources/images/runaway2.png");
 		URL url3 = getClass().getResource("resources/music/男衆「イヤッホー！」.wav");
 		ClientMain.frame.playSoundEffect(url3);
-		String text =name + "は逃げ出した！\n\n\n\n\n\n\n";
+		String text =name + "は逃げ出した！\nしかしHPが3減った。\n\n\n\n\n\n";
 	     // カスタムパネルを作成してフレームに追加
 		
 	        TextAndImagePanel2 panel = new TextAndImagePanel2(url, TitleView.text);	    
@@ -133,7 +170,7 @@ public void run() {
 		    this.setVisible(true);
 
 	        // テキストを1文字ずつ0.1秒ごとに表示するためのタイマーをセットアップ
-	        Timer timer = new Timer(50, new ActionListener() {
+	        Timer timer = new Timer(100, new ActionListener() {
 	            private int charIndex = 0;
 
 	            @Override
@@ -146,7 +183,8 @@ public void run() {
 	                    if(ClientMain.frame.getHP() <= 0) {
 	                    	BadEndingView();
 	                    }else {
-	                    	changeView(new SimpleRPG());
+//	                    	changeView(new SimpleRPG());
+	                    	clear();
 	                    }
 	                }
 	            }
@@ -182,7 +220,7 @@ public void pekopeko() {
 	                    ((Timer) e.getSource()).stop();
 	                    // プロローグ終了後、Ending画面に遷移
 	                    if(ClientMain.frame.getHP() >= 20) {
-	                    	EndingView();
+	                    	clear();
 	                    }else {
 	                    	changeView(new SimpleRPG());
 	                    }
@@ -314,12 +352,12 @@ public void pekopeko() {
 	            "今日もイキりまくったファッションで\n"
 	            + "IT企業「ZOO」に二日酔い＆大遅刻で現れた。\n\n"
 	            +
-	            "そんな「"+ name+ "」に突然、社長室へ来るようにとの指示が…。\n\n"
+	            "そんな「" + name + " 」に突然、社長室へ来るようにとの指示が…。\n\n"
 	            + 
 	            "“そんな…まさか、遅刻ぐらいで社長室へ…（涙）”\n"
-	            + "ウサギのハートをびくびく震わせながらも、\n"
+	            + "ガラスのハートをびくびく震わせながらも、\n"
 	            + "イキった顔で社長室へと向かう「"+ name + "」。\n\n"
-	            + "その背中に、きりん課長が声をかける。\n";
+	            + "その背中に、課長が声をかける。\n";
 	     // カスタムパネルを作成してフレームに追加
 	        TextAndImagePanel panel = new TextAndImagePanel(url, TitleView.text);
 	        this.add(panel);
@@ -372,7 +410,7 @@ public void PrologueView1() {
 		getContentPane().removeAll();
 		URL url = getClass().getResource("resources/images/prologue2.png");
 		URL url1 = getClass().getResource("resources/images/start-button.png");
-		String text ="きりん課長\n「社長室の前のミーティングルームで、\n"
+		String text ="課長\n「社長室の前のミーティングルームで、\n"
 	            + "　お前はパワハラ上司や\n"
 				+"　クレーマークライアントに出会うだろう。\n\n"
 	            +
@@ -506,30 +544,20 @@ public void BadEndingView() {
 		String name = new String(TitleView.name.getText());
 		URL url = getClass().getResource("resources/images/success_epilogue.png");
 		URL url1 = getClass().getResource("resources/images/skip-button.png");
+		URL url3 = getClass().getResource("resources/music/sevillanotoride.wav");
+		ClientMain.frame.playSoundEffect(url3);
 		String text1 = 
-		"らいおん社長\n" +
+		"社長\n" +
 		"「待っていたよ…。『"+name+"』くん…」\n\n"+
 		name + "\n"+	
-		"らいおん社長ッッ…！」\n\n"+
-		"らいおん社長\n"+
+		"社長ッッ…！」\n\n"+
+		"社長\n"+
 		"「『男子たるもの、\n三日会わざれば刮目して見よ』と言うが…。\n"+
 		"今日一日で、ずいぶん成長したようだね…」\n\n"+
 		name + "\n"+
 		"「めっそうもございませんッッ…！」\n\n"+
-		"らいおん社長\n"+
+		"社長\n"+
 		"「ところで、『福岡県ダイバーシティ計画』\nのことは知っているね？\n";		
-//		うさお
-//		「なんと、私ごときに…。ありがたき幸せッッ…！」
-//
-//		らいおん社長
-//		「そして、もうひとつ…。
-//		この会社を、明日から君に任せたい。
-//		老兵は去るのみ、未来を若いうさぎに託したいのだ。
-//
-//		なってくれるね？株式会社『ZOO』の新しい社長に…」
-//
-//		静かに頷き、頬を涙で濡らす「うさお」。
-//		そのうさぎの赤い瞳は、『ZOO』の行く末を明るく照らしていた…。
 
 	        TextAndImagePanel panel = new TextAndImagePanel(url,text1);
 	        add(panel);
@@ -586,12 +614,12 @@ public void BadEndingView() {
 		"今後、我が社も大きなプロジェクトを\n担当する予定だ。\n"+
 		"実は君に、そのリーダーを任せたい」\n\n"+
 		name + "\n"+
-		"「私ごときに…。\nありがたき幸せッッ…！」\n"+
+		"「ありがたき幸せッッ…！」\n"+
 		"\n"+
-		"らいおん社長\n"+
+		"社長\n"+
 		"「そして、もうひとつ…。\n"+
 		"この会社を、明日から君に任せたい。\n"+
-		"老兵は去るのみ、\n未来を若いうさぎに託したいのだ。\n"+
+		"老兵は去るのみ、\n未来を若者に託したいのだ。\n"+
 		"なってくれるね？\n株式会社『ZOO』の新しい社長に…」\n\n"+
 
 		"静かに頷き、頬を涙で濡らす「"+name+"」。\n"+
@@ -619,6 +647,7 @@ public void BadEndingView() {
 		        @Override
 		        public void actionPerformed(ActionEvent e) {
 		            changeView(new TitleView());
+		            ClientMain.frame.stopMusic();
 		        }
 		    });
 		    panel.add(skipButton);
