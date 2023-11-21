@@ -75,10 +75,10 @@ public String useTechnique() {
 
 public String useTechnique1() {
     Random random = new Random();
-    int randomValue = random.nextInt(3);
+    int randomValue = random.nextInt(4);
     if (randomValue == 0) {
         return "イキりタックル！";
-    } else if(randomValue == 1) {
+    } else if(randomValue == 1||randomValue == 3) {
         return "おとなぺこぺこ（笑）";
     }else if(randomValue == 2) {
     	return "イキり中指！";

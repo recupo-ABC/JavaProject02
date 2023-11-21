@@ -130,7 +130,7 @@ public void clear() {
 	    this.setVisible(true);
 
         // テキストを1文字ずつ0.1秒ごとに表示するためのタイマーをセットアップ
-        Timer timer = new Timer(180, new ActionListener() {
+        Timer timer = new Timer(150, new ActionListener() {
             private int charIndex = 0;
 
             @Override
@@ -472,7 +472,6 @@ public void PrologueView1() {
 	
 public void BadEndingView() {
 	ClientMain.frame.setText("lose");
-	AccountDAO.Insert();
 	getContentPane().removeAll();
 	URL url = getClass().getResource("resources/images/failure_epilogue.png");
 	URL url1 = getClass().getResource("resources/images/RePLAY-button .png");
@@ -531,7 +530,6 @@ public void BadEndingView() {
 
 	public void EndingView() {
     	ClientMain.frame.setText("win");
-		AccountDAO.Insert();
 		getContentPane().removeAll();
 		String name = new String(TitleView.name.getText());
 		URL url = getClass().getResource("resources/images/success_epilogue.png");
